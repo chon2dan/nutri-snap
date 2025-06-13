@@ -48,12 +48,11 @@ export async function analyzeFoodImage(imageData: string) {
 
     const response = await result.response;
     const text = response.text();
-    
     try {
       return JSON.parse(text);
     } catch (e) {
-      console.error("Failed to parse JSON response from Gemini:", text, e);
-      throw new Error("API did not return valid JSON.");
+      console.error("Failed to parse Gemini response:", text);
+      throw new Error("Could not parse the nutritional data from the image.");
     }
 
   } catch (error) {

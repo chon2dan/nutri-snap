@@ -1,8 +1,16 @@
-"use client";
+'use client';
 
 import { useState } from 'react';
 import { Camera } from './components/Camera';
 import { FoodInfo } from './components/FoodInfo';
+import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import CircularProgress from '@mui/material/CircularProgress';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 
 interface FoodInfoType {
   name: string;
@@ -10,6 +18,7 @@ interface FoodInfoType {
   carbs: number;
   protein: number;
   fat: number;
+  description: string;
 }
 
 export default function Home() {
@@ -18,38 +27,10 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleImageSelect = (imgData: string) => {
-    setImage(imgData);
+  const handleImageSelect = (base64: string) => {
+    setImage(base64);
     setFoodInfo(null);
     setError(null);
-  };
-
-  const handleCalculate = async () => {
-    if (!image) return;
-
-    setIsLoading(true);
-    setError(null);
-    setFoodInfo(null);
-
-    try {
-      const response = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ imageData: image }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: 'Server error' }));
-        throw new Error(errorData.message || 'Failed to analyze image');
-      }
-
-      const data = await response.json();
-      setFoodInfo(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   const resetState = () => {
@@ -59,61 +40,96 @@ export default function Home() {
     setIsLoading(false);
   };
 
-  return (
-    <main className="flex flex-col items-center min-h-screen bg-gray-50 dark:bg-black p-4 font-sans">
-      <div className="w-full max-w-md mx-auto flex flex-col h-full pt-8">
-        <header className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-gray-800 dark:text-white">Calorie</h1>
-        </header>
+  const analyzeImage = async () => {
+    if (!image) return;
 
-        <div className="flex-grow flex flex-col justify-center space-y-6">
-          {foodInfo ? (
-            <FoodInfo data={foodInfo} />
-          ) : (
-            <Camera 
-              onImageSelect={handleImageSelect} 
-              imagePreview={image} 
-              resetImage={() => setImage(null)}
-            />
+    setIsLoading(true);
+    setError(null);
+    setFoodInfo(null);
+
+    try {
+      const response = await fetch('/api/analyze', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ image }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to analyze image');
+      }
+
+      const data = await response.json();
+      const description = data.description || 'Nutritional information per 100g.';
+      setFoodInfo({ ...data, description });
+
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <Container maxWidth="sm">
+      <Box
+        sx={{
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          py: 4,
+        }}
+      >
+        <Typography variant="h4" component="h1" fontWeight="bold" gutterBottom>
+          NutriSnap
+        </Typography>
+
+        <Stack spacing={4} sx={{ width: '100%', alignItems: 'center' }}>
+          { <Camera onImageSelect={handleImageSelect} imagePreview={image} />}
+
+          {image && !foodInfo && !isLoading && (
+            <Button
+              onClick={analyzeImage}
+              disabled={isLoading}
+              variant="contained"
+              size="small"
+              sx={{ width: '100%', fontSize: '1rem' }}
+            >
+              Analyze Image
+            </Button>
           )}
 
           {isLoading && (
-            <div className="flex flex-col items-center justify-center p-8">
-              <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
-              <p className="mt-4 text-lg font-semibold text-gray-700 dark:text-gray-300">Calculating...</p>
-            </div>
+            <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+              <CircularProgress size={60} />
+            </Box>
           )}
 
           {error && (
-            <div className="p-4 bg-red-100 dark:bg-red-900/50 border border-red-400 dark:border-red-600 rounded-xl text-center">
-              <p className="font-semibold text-red-700 dark:text-red-300">Error</p>
-              <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
-            </div>
+            <Alert severity="error" sx={{ width: '100%' }}>
+              <AlertTitle>Error</AlertTitle>
+              {error}
+            </Alert>
           )}
-        </div>
+          
+          {foodInfo && <FoodInfo data={foodInfo} />}
 
-        <div className="mt-auto pb-8">
-          {foodInfo || error ? (
-            <button
+          {(foodInfo || error) && (
+            <Button
               onClick={resetState}
-              className="w-full px-4 py-4 bg-gray-600 text-white font-semibold rounded-xl hover:bg-gray-700 transition-colors shadow-lg disabled:opacity-50"
+              variant="outlined"
+              size="large"
+              sx={{ width: '100%' }}
             >
-              Try Again
-            </button>
-          ) : (
-            <button
-              onClick={handleCalculate}
-              disabled={!image || isLoading}
-              className="w-full px-4 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isLoading ? 'Calculating...' : 'Calculate'}
-            </button>
+              RESTART
+            </Button>
           )}
-           <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-4">
-            {foodInfo ? 'Calorie data has been added.' : 'Calorie data will be added.'}
-          </p>
-        </div>
-      </div>
-    </main>
+        </Stack>
+      </Box>
+    </Container>
   );
 }
