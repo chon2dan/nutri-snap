@@ -1,5 +1,14 @@
 import { GoogleGenerativeAI, Part, SchemaType } from '@google/generative-ai';
 
+export interface FoodNutrition {
+  name: string;
+  calories: number;
+  carbs: number;
+  protein: number;
+  fat: number;
+}
+
+
 // 데이터 URL을 GoogleGenerativeAI.Part 객체로 변환하는 함수
 function dataUrlToGenerativePart(dataUrl: string): Part {
   const match = dataUrl.match(/^data:(.+);base64,(.+)$/);
@@ -16,7 +25,7 @@ function dataUrlToGenerativePart(dataUrl: string): Part {
   };
 }
 
-export async function analyzeFoodImage(imageData: string) {
+export async function analyzeFoodImage(imageData: string): Promise<FoodNutrition[]> {
   try {
     const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || '');
 
@@ -35,13 +44,22 @@ export async function analyzeFoodImage(imageData: string) {
         responseSchema: {
           type: SchemaType.OBJECT,
           properties: {
-            name: { type: SchemaType.STRING, description: "과일 또는 음식의 이름" },
-            calories: { type: SchemaType.INTEGER, description: "칼로리 (단위: kcal)" },
-            carbs: { type: SchemaType.INTEGER, description: "탄수화물 (단위: g)" },
-            protein: { type: SchemaType.NUMBER, description: "단백질 (단위: g)" },
-            fat: { type: SchemaType.NUMBER, description: "지방 (단위: g)" },
+            foods: {
+              type: SchemaType.ARRAY,
+              items: {
+                type: SchemaType.OBJECT,
+                properties: {
+                  name: { type: SchemaType.STRING, description: "과일 또는 음식의 이름" },
+                  calories: { type: SchemaType.INTEGER, description: "칼로리 (단위: kcal)" },
+                  carbs: { type: SchemaType.INTEGER, description: "탄수화물 (단위: g)" },
+                  protein: { type: SchemaType.NUMBER, description: "단백질 (단위: g)" },
+                  fat: { type: SchemaType.NUMBER, description: "지방 (단위: g)" },
+                },
+                required: ["name", "calories", "carbs", "protein", "fat"],
+              }
+            }
           },
-          required: ["name", "calories", "carbs", "protein", "fat"],
+          required: ["foods"]
         },
       },
     });
@@ -49,10 +67,13 @@ export async function analyzeFoodImage(imageData: string) {
     const response = await result.response;
     const text = response.text();
     try {
-      return JSON.parse(text);
-    } catch (e) {
-      console.error("Failed to parse Gemini response:", text);
-      throw new Error("Could not parse the nutritional data from the image.");
+      const parsedData: { foods: FoodNutrition[] } = JSON.parse(text);
+      console.log(JSON.stringify(parsedData.foods, null, 2));
+      return parsedData.foods;
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+      console.error("Raw response text:", text);
+      throw new Error("Failed to parse food data from the image.");
     }
 
   } catch (error) {
