@@ -92,6 +92,7 @@ export function FoodInfo({ data }: { data: FoodInfoType }) {
     };
   }
 
+  //health icon
   function getHealthIcon(score: number) {
     if (score >= 80) return <CheckCircleIcon color="success" />;
     if (score >= 60) return <InfoIcon color="info" />;
