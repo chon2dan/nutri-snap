@@ -34,7 +34,7 @@ export function Camera({ onImageSelect, imagePreview }: CameraProps) {
       sx={{
         width: '100%',
         maxWidth: '500px',
-        border: '2px dashed grey',
+        border: '2px grey' + (imagePreview ? 'dashed' : 'solid'),
         '&:hover': {
           borderColor: 'primary.main',
           cursor: 'pointer',

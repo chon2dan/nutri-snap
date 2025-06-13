@@ -24,7 +24,7 @@ export async function analyzeFoodImage(imageData: string) {
       model: "gemini-1.5-flash-latest",
     });
 
-    const prompt = `Analyze the food in this image. Provide its name and nutritional information per 100g (calories, carbohydrates, protein, and fat).`;
+    const prompt = `Analyze the food in this image. I need to analyze the food in very detailed units and tell you. Provide its name and nutritional information per 100g (calories, carbohydrates, protein, and fat). And return me food names into Korean.`;
 
     const imagePart = dataUrlToGenerativePart(imageData);
 
