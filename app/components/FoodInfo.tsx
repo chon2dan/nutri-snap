@@ -14,6 +14,7 @@ import SetMealIcon from '@mui/icons-material/SetMeal';
 import OpacityIcon from '@mui/icons-material/Opacity';
 import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { FoodInfoType, MacroInput } from '@/types';
 
 /** 위험도 표시용 아이콘 */
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -21,21 +22,6 @@ import InfoIcon from '@mui/icons-material/Info';
 import WarningIcon from '@mui/icons-material/Warning';
 import ErrorIcon from '@mui/icons-material/Error';
 
-
-interface FoodInfoType {
-  name: string;
-  calories: number;
-  carbs: number;
-  protein: number;
-  fat: number;
-  description: string;
-}
-
-type MacroInput = {
-  carb: number;    // 탄수화물 (g)
-  protein: number; // 단백질 (g)
-  fat: number;     // 지방 (g)
-};
 
 export function FoodInfo({ data }: { data: FoodInfoType }) {
   const stats = [

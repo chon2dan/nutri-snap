@@ -1,12 +1,5 @@
 import { GoogleGenerativeAI, Part, SchemaType } from '@google/generative-ai';
-
-export interface FoodNutrition {
-  name: string;
-  calories: number;
-  carbs: number;
-  protein: number;
-  fat: number;
-}
+import { FoodInfoType } from '../types';
 
 
 // 데이터 URL을 GoogleGenerativeAI.Part 객체로 변환하는 함수
@@ -25,7 +18,7 @@ function dataUrlToGenerativePart(dataUrl: string): Part {
   };
 }
 
-export async function analyzeFoodImage(imageData: string): Promise<FoodNutrition[]> {
+export async function analyzeFoodImage(imageData: string): Promise<FoodInfoType[]> {
   try {
     const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || '');
 
@@ -67,7 +60,7 @@ export async function analyzeFoodImage(imageData: string): Promise<FoodNutrition
     const response = await result.response;
     const text = response.text();
     try {
-      const parsedData: { foods: FoodNutrition[] } = JSON.parse(text);
+      const parsedData: { foods: FoodInfoType[] } = JSON.parse(text);
       console.log(JSON.stringify(parsedData.foods, null, 2));
       return parsedData.foods;
     } catch (error) {

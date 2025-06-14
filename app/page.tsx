@@ -11,15 +11,7 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-
-interface FoodInfoType {
-  name: string;
-  calories: number;
-  carbs: number;
-  protein: number;
-  fat: number;
-  description: string;
-}
+import { FoodInfoType } from '@/types';
 
 export default function Home() {
   const [image, setImage] = useState<string | null>(null);
@@ -62,8 +54,7 @@ export default function Home() {
       }
 
       const data = await response.json();
-      const description = data.description || 'Nutritional information per 100g.';
-      setFoodInfo({ ...data, description });
+      setFoodInfo(data);
 
     } catch (err: any) {
       setError(err.message);
