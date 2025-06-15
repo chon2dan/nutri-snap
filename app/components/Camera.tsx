@@ -1,10 +1,9 @@
 "use client";
 
-import { ChangeEvent, useRef } from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import { Box, Typography } from '@mui/material';
+import { ChangeEvent, useRef } from "react";
+import { Box, Typography, Stack, Paper } from "@mui/material";
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 interface CameraProps {
   onImageSelect: (base64: string) => void;
@@ -12,7 +11,8 @@ interface CameraProps {
 }
 
 export function Camera({ onImageSelect, imagePreview }: CameraProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const uploadInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -26,48 +26,90 @@ export function Camera({ onImageSelect, imagePreview }: CameraProps) {
     }
   };
 
-  const triggerFileSelect = () => fileInputRef.current?.click();
+  const triggerCameraCapture = () => cameraInputRef.current?.click();
+  const triggerFileUpload = () => uploadInputRef.current?.click();
 
   return (
-    <Card
-      variant="outlined"
-      sx={{
-        width: '100%',
-        maxWidth: '500px',
-        border: '2px grey' + (imagePreview ? 'dashed' : 'solid'),
-        '&:hover': {
-          borderColor: 'primary.main',
-          cursor: 'pointer',
-        },
-        p: 2,
-      }}
-      onClick={triggerFileSelect}
-    >
-      <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 200 }}>
-        {imagePreview ? (
-          <Box sx={{ position: 'relative', width: '100%' }}>
-            <img
-              src={imagePreview}
-              alt="Selected preview"
-              style={{ width: '100%', height: '300px', borderRadius: '8px', objectFit: 'cover' }}
-            />
-          </Box>
-        ) : (
-          <Box sx={{ textAlign: 'center' }}>
-            <PhotoCamera sx={{ fontSize: 60, color: 'text.secondary' }} />
-            <Typography variant="h6" color="text.secondary" sx={{ mt: 2 }}>
-              Click to upload an image
+    <>
+      {imagePreview ? (
+        <Box sx={{ width: "100%" }}>
+          <img
+            src={imagePreview}
+            alt="Preview"
+            style={{
+              width: "100%",
+              maxHeight: "300px",
+              objectFit: "cover",
+              borderRadius: "8px",
+            }}
+          />
+        </Box>
+      ) : (
+        <Stack direction="row" spacing={2} width="100%">
+          {/* 카메라 촬영 */}
+          <Paper
+            elevation={3}
+            onClick={triggerCameraCapture}
+            sx={{
+              flex: 1,
+              height: 200,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              "&:hover": {
+                border: "1px solid",
+                borderColor: "primary.main",
+              },
+            }}
+          >
+            <PhotoCameraIcon sx={{ fontSize: 48, color: "text.secondary" }} />
+            <Typography variant="body2" mt={1}>
+              Take a photo
             </Typography>
-          </Box>
-        )}
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          accept="image/*, .heic, .heif"
-          style={{ display: 'none' }}
-        />
-      </CardContent>
-    </Card>
+            <input
+              type="file"
+              ref={cameraInputRef}
+              accept="image/*"
+              capture="environment"
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
+          </Paper>
+
+          {/* 이미지 업로드 */}
+          <Paper
+            elevation={3}
+            onClick={triggerFileUpload}
+            sx={{
+              flex: 1,
+              height: 200,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              "&:hover": {
+                border: "1px solid",
+                borderColor: "primary.main",
+              },
+            }}
+          >
+            <UploadFileIcon sx={{ fontSize: 48, color: "text.secondary" }} />
+            <Typography variant="body2" mt={1}>
+              Upload image
+            </Typography>
+            <input
+              type="file"
+              ref={uploadInputRef}
+              accept="image/*, .heic, .heif"
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
+          </Paper>
+        </Stack>
+      )}
+    </>
   );
 }
