@@ -16,7 +16,7 @@ import { FoodCardList } from "./components/FoodCardList";
 
 export default function Home() {
   const [image, setImage] = useState<string | null>(null);
-  const [foodInfo, setFoodInfo] = useState<FoodInfoType | null>(null);
+  const [foodInfo, setFoodInfo] = useState<FoodInfoType[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

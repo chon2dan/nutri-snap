@@ -13,7 +13,7 @@ import SetMealIcon from "@mui/icons-material/SetMeal";
 import OilBarrelIcon from "@mui/icons-material/OilBarrel";
 import { FoodInfoType } from "@/types";
 
-export function FoodCardList({ data }: { data: FoodInfoType }) {
+export function FoodCardList({ data }: { data: FoodInfoType[] }) {
   return (
     <Box sx={{ flexGrow: 1, mt: 2 }}>
       <Grid container spacing={2}>

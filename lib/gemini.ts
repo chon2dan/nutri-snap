@@ -28,7 +28,7 @@ function dataUrlToGenerativePart(dataUrl: string): Part {
  */
 export async function analyzeFoodImage(
   imageData: string
-): Promise<FoodInfoType> {
+): Promise<FoodInfoType[]> {
   try {
     const genAI = new GoogleGenAI({
       apiKey: process.env.GOOGLE_API_KEY || "",
@@ -124,7 +124,7 @@ export async function analyzeFoodImage(
 
     const text = await result.text;
     try {
-      const parsedData: { foods: FoodInfoType } = JSON.parse(
+      const parsedData: { foods: FoodInfoType[] } = JSON.parse(
         text ? text : "[]"
       );
       console.log(JSON.stringify(parsedData.foods, null, 2));

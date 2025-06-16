@@ -1,13 +1,11 @@
-export type FoodInfoType = [
-  {
-    name: string;
-    calories: number;
-    carbs: number;
-    protein: number;
-    fat: number;
-    estimatedFoodWeight: number; // 추정 음식 무게 (g)
-  }
-];
+export type FoodInfoType = {
+  name: string;
+  calories: number;
+  carbs: number;
+  protein: number;
+  fat: number;
+  estimatedFoodWeight: number; // 추정 음식 무게 (g)
+};
 
 export type MacroInput = {
   carb: number; // 탄수화물 (g)

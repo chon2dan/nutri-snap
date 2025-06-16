@@ -17,7 +17,7 @@ import { FoodInfoType, MacroInput } from "@/types";
 import NutrientRatioBar from "./NutrientRatioBar";
 import { FoodCardList } from "./FoodCardList";
 
-export function FoodInfo({ data }: { data: FoodInfoType }) {
+export function FoodInfo({ data }: { data: FoodInfoType[] }) {
   return (
     <>
       <TableContainer component={Paper} sx={{ borderRadius: 3 }}>
