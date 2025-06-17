@@ -55,6 +55,7 @@ export async function analyzeFoodImage(
       For example,
       1) If steak, mashed potatoes, and salad are on one plate, that means steak, mashed potatoes, and salad, which are three dishes.
       2) Even if salmon, wasabi, rice, seaweed, and radish sprouts are on top of the salmon rice bowl, it is salmon rice bowl. You shouldn't distinguish it by salmon, wasabi, seaweed, etc.
+      3) If the sauce is difficult to distinguish (e.g. salt and sugar, chili sauce and ketchup), try your best to guess the sauce that matches the current food and atmosphere.
       answer me as korean.
       `;
 

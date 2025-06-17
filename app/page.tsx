@@ -12,7 +12,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import { FoodInfoType } from "@/types";
-import { FoodCardList } from "./components/FoodCardList";
+import logo from "@/assets/logo.png";
 
 export default function Home() {
   const [image, setImage] = useState<string | null>(null);
@@ -68,7 +68,6 @@ export default function Home() {
       maxWidth="sm"
       sx={{
         height: "100vh",
-        overflow: "auto", // 컨테이너 레벨에서 스크롤 설정
       }}
     >
       <Box
@@ -80,9 +79,22 @@ export default function Home() {
           py: 4,
         }}
       >
-        <Typography variant="h4" component="h1" fontWeight="bold" gutterBottom>
+        {/* <Typography variant="h4" component="h1" fontWeight="bold" gutterBottom>
           NutriSnap
-        </Typography>
+        </Typography> */}
+        <Box
+          component="img"
+          src={logo.src}
+          alt="NutriSnap Logo"
+          sx={{
+            //height: 100,
+            //width: 100,
+            //borderRadius: "50%",
+            //objectFit: "cover",
+            height: "50%",
+            width: "50%",
+          }}
+        />
 
         <Stack spacing={4} sx={{ width: "100%", alignItems: "center" }}>
           {<Camera onImageSelect={handleImageSelect} imagePreview={image} />}
@@ -123,7 +135,7 @@ export default function Home() {
           )}
 
           {foodInfo && <FoodInfo data={foodInfo} />}
-          {foodInfo && <FoodCardList data={foodInfo} />}
+          {/* {foodInfo && <FoodCardList data={foodInfo} />} */}
 
           {(foodInfo || error) && (
             <Button
