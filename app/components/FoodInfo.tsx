@@ -6,26 +6,34 @@ import {
   Box,
   Button,
   Collapse,
+  Grid,
   Paper,
   Slide,
   Stack,
   TableContainer,
   Tooltip,
 } from "@mui/material";
+import { BarChart } from "@mui/x-charts/BarChart";
 import InfoIcon from "@mui/icons-material/Info";
 import { useEffect, useState } from "react";
 import { FoodInfoType } from "@/types";
+import { NutrientColors } from "@/css";
 
 /** 위험도 표시용 아이콘 */
 import NutrientRatioBar from "./NutrientRatioBar";
+import { useResizeDetector } from "react-resize-detector";
 
 export function FoodInfo({ data }: { data: FoodInfoType[] }) {
   const [open, setOpen] = useState(false);
-  const nutrientColors = {
-    carbs: "purple",
-    protein: "green",
-    fat: "red",
-  };
+  const [totalNutrient, setTotalNutrient] = useState({
+    totalCarb: 0,
+    totalProtein: 0,
+    totalFat: 0,
+    totalCalories: 0,
+    totalEstimatedFoodWeight: 0,
+  });
+
+  const { width, ref } = useResizeDetector();
 
   const calculateTotalNutrientByEstimatedFoodWeight = (
     food: FoodInfoType[]
@@ -67,24 +75,22 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
           )
         )
       ),
+      totalEstimatedFoodWeight: Math.floor(
+        Number(
+          food.reduce((total, item) => total + item.estimatedFoodWeight, 0)
+        )
+      ),
     };
   };
+
+  useEffect(() => {
+    setTotalNutrient(calculateTotalNutrientByEstimatedFoodWeight(data));
+  }, [data]);
 
   return (
     <>
       <TableContainer component={Paper} sx={{ borderRadius: 3 }}>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          sx={{ p: 2, bgcolor: "#f5f5f5" }}
-        >
-          영양 정보 (per 100g)
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="left"
-          sx={{ p: 2, bgcolor: "#f5f5f5" }}
-        >
+        <Box sx={{ p: 2, bgcolor: "#f5f5f5" }}>
           {/* 아래로 슬라이드 오픈 버튼 */}
           {/* 🔘 토글 버튼 */}
           <Box textAlign="center">
@@ -119,13 +125,9 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
               {/* <Typography variant="subtitle2" fontWeight="bold">
                 사진으로 분석한 음식 무게에 대한 총 칼로리
               </Typography> */}
-              <Typography variant="subtitle2" align="center">
+              <Typography variant="subtitle2" align="center" mb={1}>
                 사진 속 음식의 예상 중량:{" "}
-                {data.reduce(
-                  (total, item) => total + item.estimatedFoodWeight,
-                  0
-                )}
-                g
+                {totalNutrient.totalEstimatedFoodWeight}g
               </Typography>
               {data.map((item) => (
                 <Stack key={item.name} direction="row" justifyContent="center">
@@ -138,61 +140,98 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
                   </Typography>
                 </Stack>
               ))}
+              {/* 총 탄수화물, 단백질, 지방 그리드 */}
+              <Box sx={{ display: "flex", justifyContent: "center" }} ref={ref}>
+                <BarChart
+                  resolveSizeBeforeRender
+                  xAxis={[
+                    {
+                      scaleType: "band",
+                      data: ["탄수화물", "단백질", "지방"],
+                      disableLine: true,
+                      disableTicks: true,
+                      colorMap: {
+                        type: "ordinal",
+                        colors: [
+                          NutrientColors.carbs,
+                          NutrientColors.protein,
+                          NutrientColors.fat,
+                        ],
+                      },
+                    },
+                  ]}
+                  yAxis={[
+                    {
+                      disableLine: true,
+                      disableTicks: true,
+                      tickLabelStyle: { display: "none" },
+                    },
+                  ]}
+                  series={[
+                    {
+                      data: [
+                        totalNutrient.totalCarb,
+                        totalNutrient.totalProtein,
+                        totalNutrient.totalFat,
+                      ],
+                    },
+                  ]}
+                  //화면 총 가로길이 * 30%
+                  width={width}
+                  height={300}
+                  margin={{ top: 30, bottom: 30, left: 10, right: 10 }}
+                  barLabel={(v) => `${v.value} g`}
+                />
+              </Box>
               <Typography
                 variant="subtitle2"
                 align="center"
                 fontWeight="bold"
                 color="#e65100"
-                mb={1}
               >
-                🔥 총 예상 열량 :{" "}
-                {
-                  calculateTotalNutrientByEstimatedFoodWeight(data)
-                    .totalCalories
-                }
+                🔥 총 예상 열량 : {totalNutrient.totalCalories}
                 kcal
               </Typography>
-              {/* 총 탄수화물, 단백질, 지방 그리드 */}
-              <Stack direction="row" justifyContent="space-between" mb={1}>
+
+              {/* <Stack direction="row" justifyContent="space-between" mb={1}>
                 <Box textAlign="center" flex={1}>
                   <Typography
                     variant="body2"
-                    color="purple"
+                    color={NutrientColors.carbs}
                     fontWeight="medium"
                   >
                     탄
                   </Typography>
                   <Typography variant="body2">
-                    {
-                      calculateTotalNutrientByEstimatedFoodWeight(data)
-                        .totalCarb
-                    }
-                    g
+                    {totalNutrient.totalCarb}g
                   </Typography>
                 </Box>
                 <Box textAlign="center" flex={1}>
-                  <Typography variant="body2" color="green" fontWeight="medium">
+                  <Typography
+                    variant="body2"
+                    color={NutrientColors.protein}
+                    fontWeight="medium"
+                  >
                     단
                   </Typography>
                   <Typography variant="body2">
-                    {
-                      calculateTotalNutrientByEstimatedFoodWeight(data)
-                        .totalProtein
-                    }
-                    g
+                    {totalNutrient.totalProtein}g
                   </Typography>
                 </Box>
                 <Box textAlign="center" flex={1}>
-                  <Typography variant="body2" color="red" fontWeight="medium">
+                  <Typography
+                    variant="body2"
+                    color={NutrientColors.fat}
+                    fontWeight="medium"
+                  >
                     지
                   </Typography>
                   <Typography variant="body2">
-                    {calculateTotalNutrientByEstimatedFoodWeight(data).totalFat}
-                    g
+                    {totalNutrient.totalFat}g
                   </Typography>
                 </Box>
-              </Stack>
-              <Box textAlign={"center"} color="text.secondary" mt={2}>
+              </Stack> */}
+              <Box textAlign={"center"} color="text.secondary">
                 <Typography variant="caption">
                   * 사진으로 분석한 음식의 무게에 따른 영양정보입니다.
                   <br />
@@ -201,7 +240,14 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
               </Box>
             </Paper>
           </Collapse>
-        </Typography>
+          <Typography
+            variant="subtitle1"
+            align="center"
+            sx={{ bgcolor: "#f5f5f5" }}
+          >
+            영양 정보 (per 100g)
+          </Typography>
+        </Box>
         <Stack spacing={2}>
           {data.map((item, index) => (
             <Box
@@ -212,57 +258,57 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
                 bgcolor: "background.paper",
               }}
             >
-              {/* 음식 이름 중앙정렬*/}
+              {/* 음식 이름 중앙정렬
               <Box textAlign="center" mb={1}>
                 <Typography variant="subtitle2" fontWeight="bold">
                   {item.name}
                 </Typography>
-              </Box>
+              </Box> */}
               {/* 칼로리 중앙 정렬 */}
-              <Box textAlign="center" mb={1}>
-                <Typography
-                  variant="subtitle2"
-                  fontWeight="bold"
-                  color="#e65100"
-                >
-                  {item.calories} kcal
-                </Typography>
-              </Box>
-
-              {/* 탄/단/지 그리드 */}
-              <Stack direction="row" justifyContent="space-between" mb={1}>
-                <Box textAlign="center" flex={1}>
+              <Grid container spacing={2}>
+                <Grid size={4} alignContent="center">
                   <Typography
-                    variant="body2"
-                    color="purple"
-                    fontWeight="medium"
+                    variant="subtitle2"
+                    fontWeight="bold"
+                    align="center"
                   >
-                    탄
+                    {item.name}
                   </Typography>
-                  <Typography variant="body2">{item.carbs}g</Typography>
-                </Box>
-                <Box textAlign="center" flex={1}>
-                  <Typography variant="body2" color="green" fontWeight="medium">
-                    단
+                  <Typography
+                    variant="subtitle2"
+                    fontWeight="bold"
+                    color="#e65100"
+                    align="center"
+                  >
+                    🔥 {item.calories} kcal
+                    <br />{" "}
+                    <span
+                      style={{
+                        color: "grey",
+                        fontSize: "small",
+                        fontWeight: "normal",
+                      }}
+                    >
+                      (per 100g)
+                    </span>
                   </Typography>
-                  <Typography variant="body2">{item.protein}g</Typography>
-                </Box>
-                <Box textAlign="center" flex={1}>
-                  <Typography variant="body2" color="red" fontWeight="medium">
-                    지
-                  </Typography>
-                  <Typography variant="body2">{item.fat}g</Typography>
-                </Box>
-              </Stack>
-
+                </Grid>
+                <Grid size={8} alignItems="center" justifyContent="center">
+                  <NutrientRatioBar
+                    carbs={item.carbs}
+                    fat={item.fat}
+                    protein={item.protein}
+                  />
+                </Grid>
+              </Grid>
               {/* 비율 그래프 */}
-              <Box mt={1}>
+              {/* <Box mt={1}>
                 <NutrientRatioBar
                   carbs={item.carbs}
                   fat={item.fat}
                   protein={item.protein}
                 />
-              </Box>
+              </Box> */}
             </Box>
           ))}
         </Stack>

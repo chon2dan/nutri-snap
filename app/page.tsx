@@ -12,8 +12,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import { FoodInfoType } from "@/types";
-import logo from "@/assets/logo.png";
-
+import NavigationBar from "./components/NavigationBar";
+import Link from "@mui/material/Link";
 export default function Home() {
   const [image, setImage] = useState<string | null>(null);
   const [foodInfo, setFoodInfo] = useState<FoodInfoType[] | null>(null);
@@ -64,91 +64,99 @@ export default function Home() {
   };
 
   return (
-    <Container
-      maxWidth="sm"
-      sx={{
-        height: "100vh",
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          py: 4,
-        }}
-      >
-        {/* <Typography variant="h4" component="h1" fontWeight="bold" gutterBottom>
-          NutriSnap
-        </Typography> */}
+    <>
+      <NavigationBar foodInfo={foodInfo} onBack={resetState} />
+      <Container>
         <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            py: 4,
+          }}
+        >
+          {/* <Typography
+            variant="h4"
+            component="h1"
+            fontWeight="bold"
+            gutterBottom
+          >
+            NutriSnap
+          </Typography> */}
+          {/* <Box
           component="img"
           src={logo.src}
           alt="NutriSnap Logo"
-          sx={{
-            //height: 100,
-            //width: 100,
-            //borderRadius: "50%",
-            //objectFit: "cover",
-            height: "50%",
-            width: "50%",
-          }}
-        />
+          sx={
+            {
+              //height: 100,
+              //width: 100,
+              //borderRadius: "50%",
+              //objectFit: "cover",
+              height: "50%",
+              width: "50%",
+            }
+          }
+        /> */}
 
-        <Stack spacing={4} sx={{ width: "100%", alignItems: "center" }}>
-          {<Camera onImageSelect={handleImageSelect} imagePreview={image} />}
+          <Stack spacing={4} sx={{ width: "100%", alignItems: "center" }}>
+            {<Camera onImageSelect={handleImageSelect} imagePreview={image} />}
 
-          {image && !foodInfo && !isLoading && (
-            <Stack direction="column" spacing={2} width="100%">
-              <Button
-                onClick={analyzeImage}
-                disabled={isLoading}
-                variant="contained"
-                size="small"
-                sx={{ width: "100%", fontSize: "1rem" }}
-              >
-                Analyze
-              </Button>
+            {image && !foodInfo && !isLoading && (
+              <Stack direction="column" spacing={2} width="100%">
+                <Button
+                  onClick={analyzeImage}
+                  disabled={isLoading}
+                  variant="contained"
+                  size="small"
+                  sx={{ width: "100%", fontSize: "1rem" }}
+                >
+                  분석하기
+                </Button>
+                <Link fontSize="small" align="center" onClick={resetState}>
+                  이미지 다시 선택
+                </Link>
+                {/* <Button
+                  onClick={resetState}
+                  variant="outlined"
+                  size="small"
+                  sx={{ width: "100%", fontSize: "1rem" }}
+                >
+                  이미지 다시 선택
+                </Button> */}
+              </Stack>
+            )}
+
+            {isLoading && (
+              <Box sx={{ display: "flex", justifyContent: "center", my: 4 }}>
+                <CircularProgress size={60} />
+              </Box>
+            )}
+
+            {error && (
+              <Alert severity="error" sx={{ width: "100%" }}>
+                <AlertTitle>Error</AlertTitle>
+                {error}
+              </Alert>
+            )}
+
+            {foodInfo && <FoodInfo data={foodInfo} />}
+            {/* {foodInfo && <FoodCardList data={foodInfo} />} */}
+
+            {/* {(foodInfo || error) && (
               <Button
                 onClick={resetState}
                 variant="outlined"
-                size="small"
-                sx={{ width: "100%", fontSize: "1rem" }}
+                size="large"
+                sx={{ width: "100%" }}
               >
-                Image Reset
+                RESTART
               </Button>
-            </Stack>
-          )}
-
-          {isLoading && (
-            <Box sx={{ display: "flex", justifyContent: "center", my: 4 }}>
-              <CircularProgress size={60} />
-            </Box>
-          )}
-
-          {error && (
-            <Alert severity="error" sx={{ width: "100%" }}>
-              <AlertTitle>Error</AlertTitle>
-              {error}
-            </Alert>
-          )}
-
-          {foodInfo && <FoodInfo data={foodInfo} />}
-          {/* {foodInfo && <FoodCardList data={foodInfo} />} */}
-
-          {(foodInfo || error) && (
-            <Button
-              onClick={resetState}
-              variant="outlined"
-              size="large"
-              sx={{ width: "100%" }}
-            >
-              RESTART
-            </Button>
-          )}
-        </Stack>
-      </Box>
-    </Container>
+            )} */}
+          </Stack>
+        </Box>
+      </Container>
+    </>
   );
 }

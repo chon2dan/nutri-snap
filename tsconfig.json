@@ -5,10 +5,12 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "exactOptionalPropertyTypes": false,
+    "noPropertyAccessFromIndexSignature": false,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -16,7 +18,8 @@
     "paths": {
       "@/*": ["./*"],
       "@/types/*": ["./types/*"],
-      "@/assets/*": ["./assets/*"]
+      "@/assets/*": ["./assets/*"],
+      "@/css/*": ["./css/*"]
     },
     "baseUrl": ".",
     "plugins": [

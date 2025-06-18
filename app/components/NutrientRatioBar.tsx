@@ -10,6 +10,7 @@ import {
   linearProgressClasses,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { NutrientColors } from "@/css";
 
 type NutrientData = {
   carbs: number; // 탄수화물 g
@@ -22,12 +23,6 @@ const TARGET_RATIO = {
   carbs: 0.4,
   fat: 0.3,
   protein: 0.3,
-};
-
-const NutrientColors = {
-  carbs: "#9C27B0", // 보라
-  fat: "#F44336", // 빨강
-  protein: "#4CAF50", // 초록
 };
 
 // Styled LinearProgress for individual nutrient
@@ -59,11 +54,11 @@ export default function NutrientRatioBar({
   };
 
   return (
-    <Box p={1} borderBottom="1px solid #eee">
+    <Box p={1} borderBottom="1px solid #eee" alignItems="center">
       <Box display="flex" flexDirection="column" gap={1}>
         <Box>
           <Typography variant="caption" align="left" display="block">
-            탄수화물
+            탄수화물 {carbs}g
           </Typography>
           <NutrientBar
             variant="determinate"
@@ -73,7 +68,7 @@ export default function NutrientRatioBar({
         </Box>
         <Box>
           <Typography variant="caption" align="left" display="block">
-            단백질
+            단백질 {protein}g
           </Typography>
           <NutrientBar
             variant="determinate"
@@ -83,7 +78,7 @@ export default function NutrientRatioBar({
         </Box>
         <Box>
           <Typography variant="caption" align="left" display="block">
-            지방
+            지방 {fat}g
           </Typography>
           <NutrientBar
             variant="determinate"
