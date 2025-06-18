@@ -187,7 +187,7 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
                 variant="subtitle2"
                 align="center"
                 fontWeight="bold"
-                color="#e65100"
+                color={NutrientColors.calories}
               >
                 🔥 총 예상 열량 : {totalNutrient.totalCalories}
                 kcal
@@ -277,7 +277,7 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
                   <Typography
                     variant="subtitle2"
                     fontWeight="bold"
-                    color="#e65100"
+                    color={NutrientColors.calories}
                     align="center"
                   >
                     🔥 {item.calories} kcal
