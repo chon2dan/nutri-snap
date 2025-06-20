@@ -2,29 +2,25 @@
 
 import Typography from "@mui/material/Typography";
 import {
-  Avatar,
   Box,
   Button,
   Collapse,
   Grid,
   Paper,
-  Slide,
   Stack,
-  TableContainer,
-  Tooltip,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import { BarChart } from "@mui/x-charts/BarChart";
-import InfoIcon from "@mui/icons-material/Info";
 import { useEffect, useState } from "react";
 import { FoodInfoType } from "@/types";
 import { NutrientColors } from "@/css";
-
-/** 위험도 표시용 아이콘 */
 import NutrientRatioBar from "./NutrientRatioBar";
 import { useResizeDetector } from "react-resize-detector";
+import { calculateTotalNutrientByEstimatedFoodWeight } from "@/utils/util/foodUtil";
 
 export function FoodInfo({ data }: { data: FoodInfoType[] }) {
-  const [open, setOpen] = useState(false);
+  const [nutriCollapseOpen, setNutriCollapseOpen] = useState(true);
   const [totalNutrient, setTotalNutrient] = useState({
     totalCarb: 0,
     totalProtein: 0,
@@ -33,55 +29,27 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
     totalEstimatedFoodWeight: 0,
   });
 
-  const { width, ref } = useResizeDetector();
+  const [per100ToggleAlign, setPer100ToggleAlign] = useState<string | null>(
+    "per100g"
+  );
 
-  const calculateTotalNutrientByEstimatedFoodWeight = (
-    food: FoodInfoType[]
+  const [isPer100, setIsPer100] = useState<"per100g" | "estimated">(
+    "estimated"
+  );
+
+  const handlePer100ToggleAlign = (
+    event: React.MouseEvent<HTMLElement>,
+    newAlignment: string | null
   ) => {
-    return {
-      totalCarb: Math.floor(
-        Number(
-          food.reduce(
-            (total, item) =>
-              total + (item.carbs * item.estimatedFoodWeight) / 100,
-            0
-          )
-        )
-      ),
-      totalProtein: Math.floor(
-        Number(
-          food.reduce(
-            (total, item) =>
-              total + (item.protein * item.estimatedFoodWeight) / 100,
-            0
-          )
-        )
-      ),
-      totalFat: Math.floor(
-        Number(
-          food.reduce(
-            (total, item) =>
-              total + (item.fat * item.estimatedFoodWeight) / 100,
-            0
-          )
-        )
-      ),
-      totalCalories: Math.floor(
-        Number(
-          food.reduce(
-            (total, item) =>
-              total + (item.calories * item.estimatedFoodWeight) / 100,
-            0
-          )
-        )
-      ),
-      totalEstimatedFoodWeight: Math.floor(
-        Number(
-          food.reduce((total, item) => total + item.estimatedFoodWeight, 0)
-        )
-      ),
-    };
+    if (newAlignment !== null) {
+      setPer100ToggleAlign(newAlignment);
+      newAlignment === "per100g"
+        ? setIsPer100("per100g")
+        : setIsPer100("estimated");
+    }
   };
+
+  const { width, ref } = useResizeDetector();
 
   useEffect(() => {
     setTotalNutrient(calculateTotalNutrientByEstimatedFoodWeight(data));
@@ -193,20 +161,32 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
         <Button
           variant="outlined"
           size="small"
-          onClick={() => setOpen((prev) => !prev)}
+          onClick={() => setNutriCollapseOpen((prev) => !prev)}
         >
-          {open ? "총 영양 정보 접기" : "총 영양 정보 보기"}
+          {nutriCollapseOpen ? "총 영양 정보 접기" : "총 영양 정보 보기"}
         </Button>
       </Box>
-      <Collapse in={open}>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          //sx={{ bgcolor: "#f5f5f5" }}
-          mb={1}
+      <Collapse in={nutriCollapseOpen}>
+        <ToggleButtonGroup
+          value={per100ToggleAlign}
+          exclusive
+          onChange={handlePer100ToggleAlign}
+          aria-label="text alignment"
+          size="small"
+          sx={{
+            display: "inline-flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+          }}
         >
-          영양 정보 (per 100g)
-        </Typography>
+          <ToggleButton value="estimated" aria-label="right">
+            예상 중량 당 정보
+          </ToggleButton>
+          <ToggleButton value="per100g" aria-label="left">
+            100g 당 정보
+          </ToggleButton>
+        </ToggleButtonGroup>
 
         {data.map((item, index) => (
           <Box
@@ -235,7 +215,11 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
                   color={NutrientColors.calories}
                   align="center"
                 >
-                  🔥 {item.calories} kcal
+                  {isPer100 === "per100g"
+                    ? `🔥 ${item.calories} kcal`
+                    : `🔥 ${
+                        (item.calories * item.estimatedFoodWeight) / 100
+                      } kcal`}
                   <br />{" "}
                   <span
                     style={{
@@ -244,16 +228,14 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
                       fontWeight: "normal",
                     }}
                   >
-                    (per 100g)
+                    {isPer100 === "per100g"
+                      ? "(per 100g)"
+                      : `(예상 중량 ${item.estimatedFoodWeight}g)`}
                   </span>
                 </Typography>
               </Grid>
               <Grid size={8} alignItems="center" justifyContent="center">
-                <NutrientRatioBar
-                  carbs={item.carbs}
-                  fat={item.fat}
-                  protein={item.protein}
-                />
+                <NutrientRatioBar foodInfo={item} isPer100={isPer100} />
               </Grid>
             </Grid>
           </Box>

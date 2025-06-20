@@ -2,7 +2,7 @@
 
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -11,12 +11,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { NutrientColors } from "@/css";
-
-type NutrientData = {
-  carbs: number; // 탄수화물 g
-  fat: number; // 지방 g
-  protein: number; // 단백질 g
-};
+import { FoodInfoType } from "@/types";
 
 // 기준 비율 (%)
 const TARGET_RATIO = {
@@ -42,15 +37,18 @@ const getRatio = (value: number, total: number) =>
   total === 0 ? 0 : value / total;
 
 export default function NutrientRatioBar({
-  carbs,
-  fat,
-  protein,
-}: NutrientData) {
-  const total = carbs + fat + protein;
+  foodInfo,
+  isPer100,
+}: {
+  foodInfo: FoodInfoType;
+  isPer100: "per100g" | "estimated";
+}) {
+  const total = foodInfo.carbs + foodInfo.fat + foodInfo.protein;
+
   const ratios = {
-    carbs: getRatio(carbs, total),
-    fat: getRatio(fat, total),
-    protein: getRatio(protein, total),
+    carbs: getRatio(foodInfo.carbs, total),
+    fat: getRatio(foodInfo.fat, total),
+    protein: getRatio(foodInfo.protein, total),
   };
 
   return (
@@ -58,7 +56,11 @@ export default function NutrientRatioBar({
       <Box display="flex" flexDirection="column" gap={1}>
         <Box>
           <Typography variant="caption" align="left" display="block">
-            탄수화물 {carbs}g
+            탄수화물{" "}
+            {isPer100 === "per100g"
+              ? foodInfo.carbs
+              : (foodInfo.carbs * foodInfo.estimatedFoodWeight) / 100}
+            g
           </Typography>
           <NutrientBar
             variant="determinate"
@@ -68,7 +70,11 @@ export default function NutrientRatioBar({
         </Box>
         <Box>
           <Typography variant="caption" align="left" display="block">
-            단백질 {protein}g
+            단백질{" "}
+            {isPer100 === "per100g"
+              ? foodInfo.protein
+              : (foodInfo.protein * foodInfo.estimatedFoodWeight) / 100}
+            g
           </Typography>
           <NutrientBar
             variant="determinate"
@@ -78,7 +84,11 @@ export default function NutrientRatioBar({
         </Box>
         <Box>
           <Typography variant="caption" align="left" display="block">
-            지방 {fat}g
+            지방{" "}
+            {isPer100 === "per100g"
+              ? foodInfo.fat
+              : (foodInfo.fat * foodInfo.estimatedFoodWeight) / 100}
+            g
           </Typography>
           <NutrientBar
             variant="determinate"
