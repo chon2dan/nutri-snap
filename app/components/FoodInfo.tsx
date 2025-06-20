@@ -260,6 +260,7 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
         <Stack spacing={2}>
           {data.map((item, index) => (
             <Box
+              key={index}
               sx={{
                 p: 2,
                 border: "1px solid #e0e0e0",

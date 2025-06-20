@@ -9,7 +9,7 @@ import {
 import NutrientRatioBar from "./NutrientRatioBar";
 import { FoodInfoType } from "@/types";
 
-export function FoodCard({ item }: { item: FoodInfoType[0] }) {
+export function FoodCard({ item }: { item: FoodInfoType }) {
   return (
     <Card
       variant="outlined"
