@@ -19,6 +19,7 @@
       "@/*": ["./*"],
       "@/types/*": ["./types/*"],
       "@/assets/*": ["./assets/*"],
+      "@/components/*": ["./app/components/*"],
       "@/css/*": ["./css/*"]
     },
     "baseUrl": ".",

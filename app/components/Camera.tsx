@@ -4,6 +4,7 @@ import { ChangeEvent, useRef } from "react";
 import { Box, Typography, Stack, Paper } from "@mui/material";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import { compressImage } from "@/utils/imageCompressor";
 
 interface CameraProps {
   onImageSelect: (base64: string) => void;
@@ -14,15 +15,22 @@ export function Camera({ onImageSelect, imagePreview }: CameraProps) {
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const uploadInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+    console.log("file?.size", file?.size);
+    const options = {
+      quality: 90,
+      maxWidth: 1920,
+      maxHeight: 1080,
+      format: file?.type || "image/jpeg",
+    };
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result as string;
-        onImageSelect(base64String);
-      };
-      reader.readAsDataURL(file);
+      const result = await compressImage(file, options);
+      console.log(
+        "result.dataUrl size ",
+        Math.round(result.dataUrl.length * 0.75)
+      );
+      onImageSelect(result.dataUrl);
     }
   };
 

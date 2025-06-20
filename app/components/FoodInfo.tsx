@@ -129,8 +129,8 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
                 사진 속 음식의 예상 중량:{" "}
                 {totalNutrient.totalEstimatedFoodWeight}g
               </Typography>
-              {data.map((item) => (
-                <Stack key={item.name} direction="row" justifyContent="center">
+              {data.map((item, index) => (
+                <Stack key={index} direction="row" justifyContent="center">
                   <Typography
                     variant="caption"
                     align="center"
@@ -178,9 +178,18 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
                   ]}
                   //화면 총 가로길이 * 30%
                   width={width}
-                  height={300}
+                  height={200}
                   margin={{ top: 30, bottom: 30, left: 10, right: 10 }}
                   barLabel={(v) => `${v.value} g`}
+                  slotProps={{
+                    barLabel: {
+                      style: {
+                        fill: "#e0e0e0", // 🌟 MUI 다크테마에 어울리는 밝은 텍스트 색상
+                        fontSize: 14,
+                        fontWeight: "bold",
+                      },
+                    },
+                  }}
                 />
               </Box>
               <Typography
