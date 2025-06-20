@@ -4,7 +4,7 @@ import { ChangeEvent, useRef } from "react";
 import { Box, Typography, Stack, Paper } from "@mui/material";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-import { compressImage } from "@/utils/imageCompressor";
+import { compressImage } from "@/utils/util/imageCompressor";
 
 interface CameraProps {
   onImageSelect: (base64: string) => void;

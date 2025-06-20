@@ -7,6 +7,16 @@ import { useState } from "react";
 export default function TestPage() {
   const [open, setOpen] = useState(false);
 
+  const data = [
+    {
+      calories: 50,
+      carbs: 5,
+      estimatedFoodWeight: 300,
+      fat: 1,
+      name: "닭고기 온면",
+      protein: 5,
+    },
+  ];
   return (
     <>
       {/* 데모용 메인 콘텐츠 */}
