@@ -22,11 +22,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
+        {/* 카카오 애드핏 스크립트 */}
         <Script
           async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID}`}
-          crossOrigin="anonymous"
-          strategy="lazyOnload"
+          src="https://t1.daumcdn.net/adfit/static/ad.js"
+          strategy="lazyOnload" // 또는 "afterInteractive"
         />
       </head>
       <body>

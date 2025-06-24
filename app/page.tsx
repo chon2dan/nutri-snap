@@ -16,6 +16,7 @@ import NavigationBar from "./components/NavigationBar";
 import Link from "@mui/material/Link";
 import { Divider } from "@mui/material";
 import { useBackHandler } from "@/utils/hooks/useBackHandler";
+import KakaoAdFitAd from "./components/adComponent/KakaoAdFitAd";
 
 export default function Home() {
   const [image, setImage] = useState<string | null>(null);
@@ -119,6 +120,9 @@ export default function Home() {
         )}
       </Stack>
       {foodInfo && <FoodInfo data={foodInfo} />}
+      <Box sx={{ width: "100%", position: "fixed", bottom: 0 }}>
+        <KakaoAdFitAd adUnitId="AD_UNIT_ID" />
+      </Box>
     </>
   );
 }
