@@ -30,7 +30,7 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
   });
 
   const [per100ToggleAlign, setPer100ToggleAlign] = useState<string | null>(
-    "per100g"
+    "estimated"
   );
 
   const [isPer100, setIsPer100] = useState<"per100g" | "estimated">(
@@ -87,6 +87,17 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
               </Typography>
             </Stack>
           ))}
+          <Typography
+            variant="subtitle2"
+            align="center"
+            fontWeight="bold"
+            color={NutrientColors.calories}
+            mt={2}
+          >
+            🔥 총 예상 열량 : {totalNutrient.totalCalories}
+            kcal
+          </Typography>
+
           {/* 총 탄수화물, 단백질, 지방 그리드 */}
           <Box sx={{ display: "flex", justifyContent: "center" }} ref={ref}>
             <BarChart
@@ -139,15 +150,6 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
               }}
             />
           </Box>
-          <Typography
-            variant="subtitle2"
-            align="center"
-            fontWeight="bold"
-            color={NutrientColors.calories}
-          >
-            🔥 총 예상 열량 : {totalNutrient.totalCalories}
-            kcal
-          </Typography>
           <Box textAlign={"center"} color="text.secondary">
             <Typography variant="caption">
               * 사진으로 분석한 음식의 무게에 따른 영양정보입니다.
