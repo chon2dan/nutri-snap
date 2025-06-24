@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 
 function KakaoAdFitAd() {
@@ -20,7 +21,7 @@ function KakaoAdFitAd() {
     const winodwSize = window.innerWidth;
     if (winodwSize < 1024) {
       ins.setAttribute("data-ad-width", "320");
-      ins.setAttribute("data-ad-height", "100");
+      ins.setAttribute("data-ad-height", "50");
       ins.setAttribute("data-ad-unit", "DAN-BdRUrSNFHvGsA2Te");
     } else {
       ins.setAttribute("data-ad-width", "728");
@@ -40,7 +41,7 @@ function KakaoAdFitAd() {
   }, []);
   return (
     <>
-      <aside className="aside__kakaoAdFit"></aside>
+      <Box className="aside__kakaoAdFit"></Box>
     </>
   );
 }

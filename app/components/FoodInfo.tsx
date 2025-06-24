@@ -72,9 +72,17 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
           }}
         >
           {/* 사진으로 분석한 예상 음식 무게와 총 칼로리 확인하기 */}
-          <Typography variant="subtitle2" align="center" mb={1}>
-            사진 속 음식의 예상 총 중량:{" "}
-            {totalNutrient.totalEstimatedFoodWeight}g
+          <Typography
+            variant="subtitle2"
+            align="center"
+            fontWeight="bold"
+            color={NutrientColors.calories}
+          >
+            🔥 총 예상 열량 : {totalNutrient.totalCalories}
+            kcal
+          </Typography>
+          <Typography variant="subtitle2" align="center" mb={1} mt={1}>
+            음식 총 중량: {totalNutrient.totalEstimatedFoodWeight}g
           </Typography>
           {data.map((item, index) => (
             <Stack key={index} direction="row" justifyContent="center">
@@ -87,16 +95,6 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
               </Typography>
             </Stack>
           ))}
-          <Typography
-            variant="subtitle2"
-            align="center"
-            fontWeight="bold"
-            color={NutrientColors.calories}
-            mt={2}
-          >
-            🔥 총 예상 열량 : {totalNutrient.totalCalories}
-            kcal
-          </Typography>
 
           {/* 총 탄수화물, 단백질, 지방 그리드 */}
           <Box sx={{ display: "flex", justifyContent: "center" }} ref={ref}>
@@ -106,6 +104,8 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
                 {
                   scaleType: "band",
                   data: ["탄수화물", "단백질", "지방"],
+                  // @ts-ignore
+                  categoryGapRatio: 0.4,
                   disableLine: true,
                   disableTicks: true,
                   colorMap: {
@@ -137,7 +137,7 @@ export function FoodInfo({ data }: { data: FoodInfoType[] }) {
               //화면 총 가로길이 * 30%
               width={width}
               height={200}
-              margin={{ top: 30, bottom: 30, left: 10, right: 10 }}
+              margin={{ top: -20, bottom: 30, left: 10, right: 10 }}
               barLabel={(v) => `${v.value} g`}
               slotProps={{
                 barLabel: {

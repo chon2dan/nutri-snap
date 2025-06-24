@@ -73,53 +73,59 @@ export default function Home() {
     <>
       <NavigationBar foodInfo={foodInfo} onBack={resetState} />
       <Divider sx={{ my: 2, borderBottomWidth: 0 }} />
-
-      {!image && (
-        <Typography variant="subtitle1" align="center" fontWeight="bold" mb={2}>
-          이미지를 업로드하여 사진 속 음식의 영양 정보를 확인해보세요!
-        </Typography>
-      )}
-      <Stack alignItems="center">
-        {
-          <Box sx={{ ml: 5, mr: 5, width: "90%" }}>
-            <Camera onImageSelect={handleImageSelect} imagePreview={image} />
-          </Box>
-        }
-
-        {image && !foodInfo && !isLoading && (
-          <Stack direction="column" spacing={2} sx={{ mt: 2 }}>
-            <Button
-              onClick={analyzeImage}
-              disabled={isLoading}
-              variant="contained"
-              size="small"
-              sx={{ width: "100%", fontSize: "1rem" }}
-            >
-              분석하기
-            </Button>
-            <Link fontSize="small" align="center" onClick={resetState}>
-              이미지 다시 선택
-            </Link>
-          </Stack>
+      <Box sx={{ pb: "64px" }}>
+        {!image && (
+          <Typography
+            variant="subtitle1"
+            align="center"
+            fontWeight="bold"
+            mb={2}
+          >
+            이미지를 업로드하여 사진 속 음식의 영양 정보를 확인해보세요!
+          </Typography>
         )}
+        <Stack alignItems="center">
+          {
+            <Box sx={{ ml: 5, mr: 5, width: "90%" }}>
+              <Camera onImageSelect={handleImageSelect} imagePreview={image} />
+            </Box>
+          }
 
-        {isLoading && (
-          <Stack direction="row" alignItems={"center"} mt={2}>
-            <CircularProgress size={20} />
-            <Typography variant="body2" sx={{ ml: 2 }}>
-              이미지의 음식을 분석 중...
-            </Typography>
-          </Stack>
-        )}
+          {image && !foodInfo && !isLoading && (
+            <Stack direction="column" spacing={2} sx={{ mt: 2 }}>
+              <Button
+                onClick={analyzeImage}
+                disabled={isLoading}
+                variant="contained"
+                size="small"
+                sx={{ width: "100%", fontSize: "1rem" }}
+              >
+                분석하기
+              </Button>
+              <Link fontSize="small" align="center" onClick={resetState}>
+                이미지 다시 선택
+              </Link>
+            </Stack>
+          )}
 
-        {error && (
-          <Alert severity="error" sx={{ width: "100%" }}>
-            <AlertTitle>Error</AlertTitle>
-            {error}
-          </Alert>
-        )}
-      </Stack>
-      {foodInfo && <FoodInfo data={foodInfo} />}
+          {isLoading && (
+            <Stack direction="row" alignItems={"center"} mt={2}>
+              <CircularProgress size={20} />
+              <Typography variant="body2" sx={{ ml: 2 }}>
+                이미지의 음식을 분석하고 있어요...
+              </Typography>
+            </Stack>
+          )}
+
+          {error && (
+            <Alert severity="error" sx={{ width: "100%" }}>
+              <AlertTitle>Error</AlertTitle>
+              {error}
+            </Alert>
+          )}
+        </Stack>
+        {foodInfo && <FoodInfo data={foodInfo} />}
+      </Box>
       <Box sx={{ width: "100%", position: "fixed", bottom: 0 }}>
         <KakaoAdFitAd />
       </Box>
