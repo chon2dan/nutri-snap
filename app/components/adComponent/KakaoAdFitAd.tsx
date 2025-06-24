@@ -10,6 +10,7 @@ const KakaoAdFitAd = ({
   height?: number;
 }) => {
   useEffect(() => {
+    console.log("adUnitId", adUnitId);
     try {
       // window.kakaoAdFit 스크립트가 로드되었는지 확인
       if (typeof window !== "undefined" && window.kakaoAdFit) {
