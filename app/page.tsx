@@ -103,7 +103,7 @@ export default function Home() {
         )}
 
         {isLoading && (
-          <Stack direction="row" alignItems={"center"}>
+          <Stack direction="row" alignItems={"center"} mt={2}>
             <CircularProgress size={20} />
             <Typography variant="body2" sx={{ ml: 2 }}>
               이미지의 음식을 분석 중...
