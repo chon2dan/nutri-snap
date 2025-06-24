@@ -121,7 +121,9 @@ export default function Home() {
       </Stack>
       {foodInfo && <FoodInfo data={foodInfo} />}
       <Box sx={{ width: "100%", position: "fixed", bottom: 0 }}>
-        <KakaoAdFitAd adUnitId="AD_UNIT_ID" />
+        <KakaoAdFitAd
+          adUnitId={`${process.env.NEXT_PUBLIC_KAKAO_AD_UNIT_ID}`}
+        />
       </Box>
     </>
   );
