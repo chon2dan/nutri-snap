@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* 카카오 애드핏 스크립트 */}
         <Script
           async
-          src="https://t1.daumcdn.net/adfit/static/ad.js"
+          src="https://t1.daumcdn.net/kas/static/ba.min.js"
           strategy="lazyOnload" // 또는 "afterInteractive"
         />
       </head>
