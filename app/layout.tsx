@@ -21,14 +21,6 @@ const theme = createTheme({
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <head>
-        {/* 카카오 애드핏 스크립트 */}
-        <Script
-          async
-          src="https://t1.daumcdn.net/kas/static/ba.min.js"
-          strategy="lazyOnload" // 또는 "afterInteractive"
-        />
-      </head>
       <body>
         <ThemeProvider theme={theme}>
           <CssBaseline />
