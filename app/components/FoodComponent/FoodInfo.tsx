@@ -15,7 +15,7 @@ import { BarChart } from "@mui/x-charts/BarChart";
 import { useEffect, useState } from "react";
 import { FoodInfoType } from "@/types";
 import { NutrientColors } from "@/css";
-import NutrientRatioBar from "./NutrientRatioBar";
+import NutrientRatioBar from "@/components/FoodComponent/NutrientRatioBar";
 import { useResizeDetector } from "react-resize-detector";
 import { calculateTotalNutrientByEstimatedFoodWeight } from "@/utils/util/foodUtil";
 
