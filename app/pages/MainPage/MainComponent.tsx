@@ -82,7 +82,8 @@ export default function MainComponent() {
             fontWeight="bold"
             mb={2}
           >
-            이미지를 업로드하여 사진 속 음식의 영양 정보를 확인해보세요!
+            음식 이미지를 업로드하여
+            <br /> 사진 속 음식의 영양 정보를 확인해보세요!
           </Typography>
         )}
         <Stack alignItems="center">
@@ -127,6 +128,16 @@ export default function MainComponent() {
         </Stack>
         {foodInfo && <FoodInfo data={foodInfo} />}
       </Box>
+      {!foodInfo && (
+        <Box sx={{ width: "100%", position: "fixed", bottom: 100 }}>
+          <Typography variant="body2" align="center" color="text.secondary">
+            문의 / Contact us
+          </Typography>
+          <Typography variant="body2" align="center" color="primary">
+            nutri.snap.contact@gmail.com
+          </Typography>
+        </Box>
+      )}
       <Box sx={{ width: "100%", position: "fixed", bottom: 0 }}>
         <KakaoAdFitAd />
       </Box>

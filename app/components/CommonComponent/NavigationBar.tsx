@@ -16,23 +16,40 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ foodInfo, onBack }) => (
   <AppBar position="sticky">
     <Toolbar variant="dense" sx={{ px: 1 }}>
       <Grid container sx={{ width: "100%" }}>
-        <Grid size={4} sx={{ display: "flex", justifyContent: "flex-start" }}>
+        <Grid
+          size={2}
+          sx={{
+            display: "flex",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+        >
           {foodInfo && (
-            <IconButton
-              color="inherit"
-              aria-label="back"
-              onClick={onBack}
-            >
+            <IconButton color="inherit" aria-label="back" onClick={onBack}>
               <ArrowBackIosIcon fontSize="small" />
             </IconButton>
           )}
         </Grid>
-        <Grid size={4} sx={{ display: "flex", justifyContent: "center" }}>
+        <Grid
+          size={8}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <Typography variant="h6" color="inherit" noWrap>
             NutriSnap
           </Typography>
         </Grid>
-        <Grid size={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Grid
+          size={2}
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+          }}
+        >
           {/* <IconButton color="inherit" aria-label="next">
             <MenuIcon fontSize="small" />
           </IconButton> */}
