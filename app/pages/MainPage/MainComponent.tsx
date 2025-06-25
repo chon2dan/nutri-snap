@@ -14,12 +14,12 @@ import {
 } from "@mui/material";
 import Link from "@mui/material/Link";
 import { useState } from "react";
-import KakaoAdFitAd from "@/app/components/AdComponent/KakaoAdFitAd";
 import { Camera } from "@/app/components/CameraComponent/Camera";
 import { FoodInfo } from "@/app/components/FoodComponent/FoodInfo";
 import NavigationBar from "@/app/components/CommonComponent/NavigationBar";
+import KakaoAdFitAd from "@/app/components/AdComponent/KakaoAdFitAd";
 
-export default function Home() {
+export default function MainComponent() {
   const [image, setImage] = useState<string | null>(null);
   const [foodInfo, setFoodInfo] = useState<FoodInfoType[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
