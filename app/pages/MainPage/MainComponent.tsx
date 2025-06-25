@@ -14,10 +14,10 @@ import {
 } from "@mui/material";
 import Link from "@mui/material/Link";
 import { useState } from "react";
-import KakaoAdFitAd from "@/components/AdComponent/KakaoAdFitAd";
-import { Camera } from "@/components/CameraComponent/Camera";
-import { FoodInfo } from "@/components/FoodComponent/FoodInfo";
-import NavigationBar from "@/components/CommonComponent/NavigationBar";
+import KakaoAdFitAd from "@/app/components/AdComponent/KakaoAdFitAd";
+import { Camera } from "@/app/components/CameraComponent/Camera";
+import { FoodInfo } from "@/app/components/FoodComponent/FoodInfo";
+import NavigationBar from "@/app/components/CommonComponent/NavigationBar";
 
 export default function Home() {
   const [image, setImage] = useState<string | null>(null);
