@@ -14,26 +14,27 @@ import {
 } from "@mui/material";
 import Link from "@mui/material/Link";
 import { useState } from "react";
-import { Camera } from "@/app/components/CameraComponent/Camera";
-import { FoodInfo } from "@/app/components/FoodComponent/FoodInfo";
-import NavigationBar from "@/app/components/CommonComponent/NavigationBar";
-import KakaoAdFitAd from "@/app/components/AdComponent/KakaoAdFitAd";
+import { Camera } from "@/components/CameraComponent/Camera";
+import NavigationBar from "@/components/CommonComponent/NavigationBar";
+import KakaoAdFitAd from "@/components/AdComponent/KakaoAdFitAd";
+import { useNutriRouter } from "@/utils/hooks/useNutriRouter";
+import { useRef } from "react";
 
-export default function MainComponent() {
+export default function MainPage() {
   const [image, setImage] = useState<string | null>(null);
-  const [foodInfo, setFoodInfo] = useState<FoodInfoType[] | null>(null);
+  const foodInfoRef = useRef<FoodInfoType[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const router = useNutriRouter();
+
   const handleImageSelect = (base64: string) => {
     setImage(base64);
-    setFoodInfo(null);
     setError(null);
   };
 
   const resetState = () => {
     setImage(null);
-    setFoodInfo(null);
     setError(null);
     setIsLoading(false);
   };
@@ -43,7 +44,6 @@ export default function MainComponent() {
 
     setIsLoading(true);
     setError(null);
-    setFoodInfo(null);
 
     try {
       const response = await fetch("/api/analyze", {
@@ -60,10 +60,14 @@ export default function MainComponent() {
       }
 
       const data = await response.json();
-      setFoodInfo(data);
+
+      foodInfoRef.current = data;
+
+      router.push("/foodinfo", {
+        routeData: { foodInfo: data, image: image },
+      });
     } catch (err: any) {
       setError(err.message);
-    } finally {
       setIsLoading(false);
     }
   };
@@ -72,7 +76,7 @@ export default function MainComponent() {
 
   return (
     <>
-      <NavigationBar foodInfo={foodInfo} onBack={resetState} />
+      <NavigationBar onBack={image ? resetState : undefined} />
       <Divider sx={{ my: 2, borderBottomWidth: 0 }} />
       <Box sx={{ pb: "64px" }}>
         {!image && (
@@ -81,6 +85,7 @@ export default function MainComponent() {
             align="center"
             fontWeight="bold"
             mb={2}
+            mt={1}
           >
             음식 이미지를 업로드하여
             <br /> 사진 속 음식의 영양 정보를 확인해보세요!
@@ -93,7 +98,7 @@ export default function MainComponent() {
             </Box>
           }
 
-          {image && !foodInfo && !isLoading && (
+          {image && !isLoading && (
             <Stack direction="column" spacing={2} sx={{ mt: 2 }}>
               <Button
                 onClick={analyzeImage}
@@ -126,18 +131,15 @@ export default function MainComponent() {
             </Alert>
           )}
         </Stack>
-        {foodInfo && <FoodInfo data={foodInfo} />}
       </Box>
-      {!foodInfo && (
-        <Box sx={{ width: "100%", position: "fixed", bottom: 100 }}>
-          <Typography variant="body2" align="center" color="text.secondary">
-            문의 / Contact us
-          </Typography>
-          <Typography variant="body2" align="center" color="primary">
-            nutri.snap.contact@gmail.com
-          </Typography>
-        </Box>
-      )}
+      <Box sx={{ width: "100%", position: "fixed", bottom: 100 }}>
+        <Typography variant="body2" align="center" color="text.secondary">
+          문의 / Contact us
+        </Typography>
+        <Typography variant="body2" align="center" color="primary">
+          nutri.snap.contact@gmail.com
+        </Typography>
+      </Box>
       <Box sx={{ width: "100%", position: "fixed", bottom: 0 }}>
         <KakaoAdFitAd />
       </Box>

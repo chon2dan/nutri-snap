@@ -8,11 +8,10 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 // import MenuIcon from "@mui/icons-material/Menu";
 
 interface NavigationBarProps {
-  foodInfo: any;
-  onBack: () => void;
+  onBack?: () => void;
 }
 
-const NavigationBar: React.FC<NavigationBarProps> = ({ foodInfo, onBack }) => (
+const NavigationBar: React.FC<NavigationBarProps> = ({ onBack }) => (
   <AppBar position="sticky">
     <Toolbar variant="dense" sx={{ px: 1 }}>
       <Grid container sx={{ width: "100%" }}>
@@ -24,7 +23,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ foodInfo, onBack }) => (
             alignItems: "center",
           }}
         >
-          {foodInfo && (
+          {onBack && (
             <IconButton color="inherit" aria-label="back" onClick={onBack}>
               <ArrowBackIosIcon fontSize="small" />
             </IconButton>

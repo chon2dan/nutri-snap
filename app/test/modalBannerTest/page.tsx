@@ -1,6 +1,6 @@
 "use client";
 
-import ModalPopupAd from "@/app/components/ad_banner/ModalPopupAd";
+import ModalPopupAd from "@/components/ad_banner/ModalPopupAd";
 import { Box, Typography, Card, Button } from "@mui/material";
 import { useState } from "react";
 

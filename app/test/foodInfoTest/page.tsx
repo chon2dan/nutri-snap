@@ -1,6 +1,6 @@
 "use client";
 
-import { FoodInfo } from "@/app/components/FoodComponent/FoodInfo";
+import { FoodInfoPage } from "@/app/foodinfo/FoodInfoPage";
 import { Box } from "@mui/material";
 import ddd from "@/pics/ddd.jpg";
 import { useState } from "react";
@@ -75,7 +75,7 @@ export default function TestPage() {
           mt: 1,
         }}
       />
-      <FoodInfo data={data} />
+      <FoodInfoPage />
     </>
   );
 }
