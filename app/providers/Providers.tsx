@@ -1,23 +1,63 @@
 "use client";
 
-import { ReactNode } from "react";
+import { useState, ReactNode } from "react";
+import { useServerInsertedHTML } from "next/navigation";
+import { CacheProvider, EmotionCache } from "@emotion/react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { CacheProvider } from "@emotion/react";
-import createEmotionCache from "../emotionCache";
+import createCache from "@emotion/cache";
+import { theme } from "./theme";
 
-const theme = createTheme({
-  palette: {
-    primary: { main: "#1976d2" },
-    secondary: { main: "#9c27b0" },
-  },
-});
+interface ProvidersProps {
+  children: ReactNode;
+}
 
-const clientSideEmotionCache = createEmotionCache();
+// This implementation is based on the official MUI documentation for Next.js App Router.
+// https://mui.com/material-ui/guides/next-js-app-router/
 
-export function Providers({ children }: { children: ReactNode }) {
+export function Providers({ children }: ProvidersProps) {
+  const [{ cache, flush }] = useState(() => {
+    const cache = createCache({ key: "mui-style" });
+    cache.compat = true;
+    const prevInsert = cache.insert;
+    let inserted: string[] = [];
+    cache.insert = (...args) => {
+      const serialized = args[1];
+      if (cache.inserted[serialized.name] === undefined) {
+        inserted.push(serialized.name);
+      }
+      return prevInsert(...args);
+    };
+    const flush = () => {
+      const prevInserted = inserted;
+      inserted = [];
+      return prevInserted;
+    };
+    return { cache, flush };
+  });
+
+  useServerInsertedHTML(() => {
+    const names = flush();
+    if (names.length === 0) {
+      return null;
+    }
+    let styles = "";
+    for (const name of names) {
+      styles += cache.inserted[name];
+    }
+    return (
+      <style
+        key={cache.key}
+        data-emotion={`${cache.key} ${names.join(" ")}`}
+        dangerouslySetInnerHTML={{
+          __html: styles,
+        }}
+      />
+    );
+  });
+
   return (
-    <CacheProvider value={clientSideEmotionCache}>
+    <CacheProvider value={cache}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         {children}
@@ -25,3 +65,4 @@ export function Providers({ children }: { children: ReactNode }) {
     </CacheProvider>
   );
 }
+

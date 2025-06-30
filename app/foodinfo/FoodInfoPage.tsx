@@ -175,7 +175,7 @@ export function FoodInfoPage() {
                 //화면 총 가로길이 * 30%
                 width={width}
                 height={200}
-                margin={{ top: -20, bottom: 30, left: 10, right: 10 }}
+                margin={{ top: 10, bottom: 30, left: 10, right: 10 }}
                 barLabel={(v) => `${v.value} g`}
                 slotProps={{
                   barLabel: {
