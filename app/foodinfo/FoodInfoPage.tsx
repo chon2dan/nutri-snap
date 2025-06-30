@@ -5,14 +5,16 @@ import {
   Box,
   Button,
   Collapse,
+  Fab,
   Grid,
+  IconButton,
   Paper,
   Stack,
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
 import { BarChart } from "@mui/x-charts/BarChart";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FoodInfoType } from "@/types";
 import { NutrientColors } from "@/css";
 import NutrientRatioBar from "@/components/FoodComponent/NutrientRatioBar";
@@ -21,6 +23,9 @@ import { calculateTotalNutrientByEstimatedFoodWeight } from "@/utils/util/foodUt
 import KakaoAdFitAd from "@/components/AdComponent/KakaoAdFitAd";
 import { useNutriRouter } from "@/utils/hooks/useNutriRouter";
 import NavigationBar from "@/components/CommonComponent/NavigationBar";
+import ShareButtonsBox from "@/components/ShareButtonComponent/ShareBox";
+import { useScreenshotShare } from "@/utils/hooks/useScreenshotShare";
+import ShareIcon from "@mui/icons-material/Share";
 
 export function FoodInfoPage() {
   const { router, routeData } = useNutriRouter();
@@ -57,6 +62,9 @@ export function FoodInfoPage() {
   };
 
   const { width, ref } = useResizeDetector();
+
+  const totalNutritionRef = useRef<HTMLDivElement>(null);
+  const { shareScreenshot } = useScreenshotShare();
 
   useEffect(() => {
     if (routeData) {
@@ -95,7 +103,10 @@ export function FoodInfoPage() {
             />
           </Box>
         )}
-        <Box sx={{ border: 5, borderColor: "transparent" }}>
+        <Box
+          ref={totalNutritionRef}
+          sx={{ border: 5, borderColor: "transparent" }}
+        >
           {/* 총 칼로리 그리드 */}
           <Paper
             variant="outlined"
@@ -197,6 +208,20 @@ export function FoodInfoPage() {
             </Box>
           </Paper>
         </Box>
+        {/* <ShareButtonsBox sx={{ mb: 2 }} /> */}
+        <Box textAlign={"center"} mb={2}>
+          <Fab
+            size="large"
+            color="primary"
+            onClick={() => shareScreenshot(totalNutritionRef)}
+            sx={{ zIndex: 0 }}
+          >
+            <ShareIcon />
+          </Fab>
+        </Box>
+        <Box textAlign={"center"} mb={2}>
+          오늘 찍은 음식의 영양정보를 SNS로 공유해보세요
+        </Box>
         <Box textAlign={"center"} mb={1}>
           <Button
             variant="outlined"
@@ -282,6 +307,10 @@ export function FoodInfoPage() {
           ))}
         </Collapse>
       </Box>
+      {/* <Box sx={{ position: "fixed", bottom: 100 }}>
+        <DraggableFab />
+      </Box> */}
+
       <Box sx={{ width: "100%", position: "fixed", bottom: 0 }}>
         <KakaoAdFitAd />
       </Box>

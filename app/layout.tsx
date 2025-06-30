@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { Providers } from "./providers/Providers";
 import "./globals.css";
+import ScriptLoader from "@/components/ScriptLoader";
 export const metadata = {
   title:
     "NutriSnap - AI 음식 사진 분석기 - 한 장의 사진으로 영양정보까지! | 영양 분석 AI 플랫폼",
@@ -28,6 +29,9 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <ScriptLoader />
+      </head>
       <body>
         <Providers>{children}</Providers>
       </body>
