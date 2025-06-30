@@ -39,7 +39,6 @@ export function FoodInfoPage() {
     totalEstimatedFoodWeight: 0,
   });
   const [foodInfoData, setFoodInfoData] = useState<FoodInfoType[]>([]);
-  const [image, setImage] = useState<string | null>(null);
 
   const [per100ToggleAlign, setPer100ToggleAlign] = useState<string | null>(
     "estimated"
@@ -64,6 +63,7 @@ export function FoodInfoPage() {
   const { width, ref } = useResizeDetector();
 
   const totalNutritionRef = useRef<HTMLDivElement>(null);
+  const foodImageRef = useRef<HTMLDivElement>(null);
   const { shareScreenshot } = useScreenshotShare();
 
   useEffect(() => {
@@ -73,7 +73,6 @@ export function FoodInfoPage() {
       setTotalNutrient(
         calculateTotalNutrientByEstimatedFoodWeight(routeData.foodInfo)
       );
-      setImage(routeData.image);
     }
   }, [routeData]);
 
@@ -91,16 +90,18 @@ export function FoodInfoPage() {
               width: "100%",
             }}
           >
-            <img
-              src={routeData.image}
-              alt="Preview"
-              style={{
-                width: "100%",
-                maxHeight: "300px",
-                objectFit: "cover",
-                borderRadius: "8px",
-              }}
-            />
+            <Box ref={foodImageRef}>
+              <img
+                src={routeData.image}
+                alt="Preview"
+                style={{
+                  width: "100%",
+                  maxHeight: "300px",
+                  objectFit: "cover",
+                  borderRadius: "8px",
+                }}
+              />
+            </Box>
           </Box>
         )}
         <Box
@@ -213,7 +214,7 @@ export function FoodInfoPage() {
           <Fab
             size="large"
             color="primary"
-            onClick={() => shareScreenshot(totalNutritionRef)}
+            onClick={() => shareScreenshot([foodImageRef, totalNutritionRef])}
             sx={{ zIndex: 0 }}
           >
             <ShareIcon />
