@@ -41,7 +41,11 @@ export default function TestPage() {
         </Box>
       </Box>
 
-      <ModalPopupAd open={open} onClose={() => setOpen(false)} />
+      <ModalPopupAd
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        AdComponent={<></>}
+      />
     </>
   );
 }
