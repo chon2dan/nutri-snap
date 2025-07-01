@@ -26,6 +26,8 @@ import NavigationBar from "@/components/CommonComponent/NavigationBar";
 import ShareButtonsBox from "@/components/ShareButtonComponent/ShareBox";
 import { useScreenshotShare } from "@/utils/hooks/useScreenshotShare";
 import ShareIcon from "@mui/icons-material/Share";
+import ModalPopupAd from "@/components/AdComponent/ModalPopupAd";
+import KakaoAdFitAdModal from "@/components/AdComponent/KakaoAdFitAdModal";
 
 export function FoodInfoPage() {
   const { router, routeData } = useNutriRouter();
@@ -47,6 +49,8 @@ export function FoodInfoPage() {
   const [isPer100, setIsPer100] = useState<"per100g" | "estimated">(
     "estimated"
   );
+
+  const [modalOpen, setModalOpen] = useState(true);
 
   const handlePer100ToggleAlign = (
     event: React.MouseEvent<HTMLElement>,
@@ -78,6 +82,11 @@ export function FoodInfoPage() {
 
   return (
     <>
+      <ModalPopupAd
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        AdComponent={<KakaoAdFitAdModal />}
+      />
       <NavigationBar onBack={() => router.back()} />
       <Box sx={{ pb: "64px" }}>
         {routeData?.image && (
