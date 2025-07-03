@@ -1,4 +1,4 @@
-import { FoodInfoPage } from "@/app/foodinfo/FoodInfoPage";
+import { FoodInfoPage } from "@/app/[locale]/foodinfo/FoodInfoPage";
 export default function FoodInfo() {
   return (
     <>

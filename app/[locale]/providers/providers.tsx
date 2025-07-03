@@ -2,20 +2,22 @@
 
 import { useState, ReactNode } from "react";
 import { useServerInsertedHTML } from "next/navigation";
-import { CacheProvider, EmotionCache } from "@emotion/react";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { CacheProvider } from "@emotion/react";
+import { ThemeProvider } from "@mui/material/styles";
+import { I18nProviderClient } from "@/app/i18n/i18n.client";
 import CssBaseline from "@mui/material/CssBaseline";
 import createCache from "@emotion/cache";
 import { theme } from "./theme";
 
 interface ProvidersProps {
+  locale: string;
   children: ReactNode;
 }
 
 // This implementation is based on the official MUI documentation for Next.js App Router.
 // https://mui.com/material-ui/guides/next-js-app-router/
 
-export function Providers({ children }: ProvidersProps) {
+export function Providers({ locale, children }: ProvidersProps) {
   const [{ cache, flush }] = useState(() => {
     const cache = createCache({ key: "mui-style" });
     cache.compat = true;
@@ -57,12 +59,13 @@ export function Providers({ children }: ProvidersProps) {
   });
 
   return (
-    <CacheProvider value={cache}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        {children}
-      </ThemeProvider>
-    </CacheProvider>
+    <I18nProviderClient locale={locale}>
+      <CacheProvider value={cache}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          {children}
+        </ThemeProvider>
+      </CacheProvider>
+    </I18nProviderClient>
   );
 }
-

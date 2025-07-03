@@ -1,6 +1,6 @@
 "use client";
 
-import { FoodInfoPage } from "@/app/foodinfo/FoodInfoPage";
+import { FoodInfoPage } from "@/app/[locale]/foodinfo/FoodInfoPage";
 import { Box } from "@mui/material";
 import ddd from "@/pics/ddd.jpg";
 import { useState } from "react";

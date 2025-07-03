@@ -1,7 +1,8 @@
 "use client";
 
-import { FoodInfoType } from "@/types";
-import { useBackHandler } from "@/utils/hooks/useBackHandler";
+import React, { useState, useRef } from "react";
+import { FoodInfoType } from "../../types";
+import { useBackHandler } from "../../utils/hooks/useBackHandler";
 import {
   Divider,
   Box,
@@ -13,14 +14,14 @@ import {
   AlertTitle,
 } from "@mui/material";
 import Link from "@mui/material/Link";
-import { useState } from "react";
-import { Camera } from "@/components/CameraComponent/Camera";
-import NavigationBar from "@/components/CommonComponent/NavigationBar";
-import KakaoAdFitAd from "@/components/AdComponent/KakaoAdFitAd";
-import { useNutriRouter } from "@/utils/hooks/useNutriRouter";
-import { useRef } from "react";
+import { Camera } from "../../components/CameraComponent/Camera";
+import NavigationBar from "../../components/CommonComponent/NavigationBar";
+import KakaoAdFitAd from "../../components/AdComponent/KakaoAdFitAd";
+import { useNutriRouter } from "../../utils/hooks/useNutriRouter";
+import { useTranslationWithDefault } from "@/utils/hooks/useTranslationWithDefault";
 
 export default function MainPage() {
+  const t = useTranslationWithDefault();
   const [image, setImage] = useState<string | null>(null);
   const foodInfoRef = useRef<FoodInfoType[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -87,8 +88,9 @@ export default function MainPage() {
             mb={2}
             mt={1}
           >
-            음식 이미지를 업로드하여
-            <br /> 사진 속 음식의 영양 정보를 확인해보세요!
+            {t("mainpage.title.line1", "asdfasdf")}
+            <br />
+            {t("mainpage.title.line2", "asdfadsf")}
           </Typography>
         )}
         <Stack alignItems="center">
@@ -107,10 +109,10 @@ export default function MainPage() {
                 size="small"
                 sx={{ width: "100%", fontSize: "1rem" }}
               >
-                분석하기
+                {t("mainpage.analyze_button", "")}
               </Button>
               <Link fontSize="small" align="center" onClick={resetState}>
-                이미지 다시 선택
+                {t("mainpage.reselect_image", "")}
               </Link>
             </Stack>
           )}
@@ -119,14 +121,14 @@ export default function MainPage() {
             <Stack direction="row" alignItems={"center"} mt={2}>
               <CircularProgress size={20} />
               <Typography variant="body2" sx={{ ml: 2 }}>
-                이미지의 음식을 분석하고 있어요...
+                {t("mainpage.analyzing_message", "")}
               </Typography>
             </Stack>
           )}
 
           {error && (
             <Alert severity="error" sx={{ width: "100%" }}>
-              <AlertTitle>Error</AlertTitle>
+              <AlertTitle>{t("mainpage.error_title", "")}</AlertTitle>
               {error}
             </Alert>
           )}
@@ -134,7 +136,7 @@ export default function MainPage() {
       </Box>
       <Box sx={{ width: "100%", position: "fixed", bottom: 100 }}>
         <Typography variant="body2" align="center" color="text.secondary">
-          문의 / Contact us
+          {t("mainpage.contact_us", "")}
         </Typography>
         <Typography variant="body2" align="center" color="primary">
           nutri.snap.contact@gmail.com
