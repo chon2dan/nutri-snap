@@ -47,32 +47,61 @@ export async function analyzeFoodImage(
 
     // Gemini API를 사용하여 음식 이미지 분석 요청
     // 프롬프트 텍스트를 정의
-    const promptText = `Food Image Analysis Request
-        Analysis Goal: Identify the types of food within the image and provide detailed nutritional information for each food item (per dish).
+    const promptText = `You are a skilled food image analysis expert. Analyze the uploaded food image to identify distinct types of food based on plate/bowl units, and provide detailed nutritional information for each identified dish.
 
-        Detailed Analysis Guidelines:
+    Analysis Goal:
+    Identify each type of food in the image by analyzing it per dish or bowl and provide nutritional information per 100g for each one.
 
-        Food Identification Unit:
+    Analysis Guidelines:
+    Unit of Analysis: Analyze food as complete dishes in plates or bowls, not as individual ingredients.
 
-        Dish/Bowl Unit: Analyze food as complete dishes served in a plate or bowl, not as individual ingredients.
-        Clear Separation: If multiple types of food are clearly separated on a single plate, treat each as a distinct dish for analysis.
-        Example 1: If steak, mashed potatoes, and a salad are on one plate, analyze them as three separate dishes: 'Steak', 'Mashed Potatoes', and 'Salad'.
-        Example 2: If a salmon rice bowl (donburi) contains salmon, wasabi, rice, seaweed, and radish sprouts, analyze it as a single dish: 'Salmon Rice Bowl'. Do not separate and analyze individual ingredients.
-        Sauces: For sauces that are difficult to distinguish visually (e.g., salt, sugar, chili sauce, ketchup), estimate and include the most common sauce that would typically accompany the food.
-        Information to Provide (Per 100g):
+    Clear Separation Rule: If multiple types of food are clearly separated on a single plate, treat each as a separate dish.
+    Example 1: Steak, mashed potatoes, and salad on one plate → analyze as three distinct dishes.
+    Example 2: A salmon rice bowl (with salmon, rice, seaweed, sprouts, wasabi) → analyze as one dish: "Salmon Rice Bowl".
+    Sauce Estimation: If the sauce is visually unclear, estimate and include the most common sauce typically served with that food.
 
-        Food Name: State the accurate name of the food item.
-        Estimated Food Weight: Provide the approximate estimated weight of the food item in the image in grams (g).
-        Nutritional Information: Provide the following nutritional details per 100g:
-        Calories: In kcal units.
-        Carbohydrates: In g units.
-        Protein: In g units.
-        Fat: In g units.
+    Output Format:
+    For each dish, provide the following in Korean:
 
-        Think step by step and derive results so that consistent results can be obtained even when requesting the same image multiple times.
+    Food Name: Accurate name of the food item.
+    Estimated Food Weight: Approximate estimated weight in grams (g).
 
-        Please make sure your answer is in Korean only.
-      `;
+    Nutritional Information (per 100g):
+    Calories (kcal)
+    Carbohydrates (g)
+    Protein (g)
+    Fat (g)
+
+    Thinking Process:
+    Think step-by-step and derive conclusions in a systematic and logical manner so that consistent results are produced even when analyzing the same image multiple times.
+
+    Please make sure your answer is in Korean only.`;
+    //     `Food Image Analysis Request
+    //         Analysis Goal: Identify the types of food within the image and provide detailed nutritional information for each food item (per dish).
+
+    //         Detailed Analysis Guidelines:
+
+    //         Food Identification Unit:
+
+    //         Dish/Bowl Unit: Analyze food as complete dishes served in a plate or bowl, not as individual ingredients.
+    //         Clear Separation: If multiple types of food are clearly separated on a single plate, treat each as a distinct dish for analysis.
+    //         Example 1: If steak, mashed potatoes, and a salad are on one plate, analyze them as three separate dishes: 'Steak', 'Mashed Potatoes', and 'Salad'.
+    //         Example 2: If a salmon rice bowl (donburi) contains salmon, wasabi, rice, seaweed, and radish sprouts, analyze it as a single dish: 'Salmon Rice Bowl'. Do not separate and analyze individual ingredients.
+    //         Sauces: For sauces that are difficult to distinguish visually (e.g., salt, sugar, chili sauce, ketchup), estimate and include the most common sauce that would typically accompany the food.
+    //         Information to Provide (Per 100g):
+
+    //         Food Name: State the accurate name of the food item.
+    //         Estimated Food Weight: Provide the approximate estimated weight of the food item in the image in grams (g).
+    //         Nutritional Information: Provide the following nutritional details per 100g:
+    //         Calories: In kcal units.
+    //         Carbohydrates: In g units.
+    //         Protein: In g units.
+    //         Fat: In g units.
+
+    //         Think step by step and derive results so that consistent results can be obtained even when requesting the same image multiple times.
+
+    //         Please make sure your answer is in Korean only.
+    //       `;
 
     const contents = [
       { text: promptText },

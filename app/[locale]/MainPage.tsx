@@ -1,7 +1,8 @@
 "use client";
 
-import { FoodInfoType } from "@/types";
-import { useBackHandler } from "@/utils/hooks/useBackHandler";
+import React, { useState, useRef } from "react";
+import { FoodInfoType } from "../../types";
+import { useBackHandler } from "../../utils/hooks/useBackHandler";
 import {
   Divider,
   Box,
@@ -13,27 +14,28 @@ import {
   AlertTitle,
 } from "@mui/material";
 import Link from "@mui/material/Link";
-import { useState } from "react";
-import { Camera } from "@/app/components/CameraComponent/Camera";
-import { FoodInfo } from "@/app/components/FoodComponent/FoodInfo";
-import NavigationBar from "@/app/components/CommonComponent/NavigationBar";
-import KakaoAdFitAd from "@/app/components/AdComponent/KakaoAdFitAd";
+import { Camera } from "../../components/CameraComponent/Camera";
+import NavigationBar from "../../components/CommonComponent/NavigationBar";
+import KakaoAdFitAd from "../../components/AdComponent/KakaoAdFitAd";
+import { useNutriRouter } from "../../utils/hooks/useNutriRouter";
+import { useTranslationWithDefault } from "@/utils/hooks/useTranslationWithDefault";
 
-export default function MainComponent() {
+export default function MainPage() {
+  const t = useTranslationWithDefault();
   const [image, setImage] = useState<string | null>(null);
-  const [foodInfo, setFoodInfo] = useState<FoodInfoType[] | null>(null);
+  const foodInfoRef = useRef<FoodInfoType[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const router = useNutriRouter();
+
   const handleImageSelect = (base64: string) => {
     setImage(base64);
-    setFoodInfo(null);
     setError(null);
   };
 
   const resetState = () => {
     setImage(null);
-    setFoodInfo(null);
     setError(null);
     setIsLoading(false);
   };
@@ -43,7 +45,6 @@ export default function MainComponent() {
 
     setIsLoading(true);
     setError(null);
-    setFoodInfo(null);
 
     try {
       const response = await fetch("/api/analyze", {
@@ -60,10 +61,14 @@ export default function MainComponent() {
       }
 
       const data = await response.json();
-      setFoodInfo(data);
+
+      foodInfoRef.current = data;
+
+      router.push("/foodinfo", {
+        routeData: { foodInfo: data, image: image },
+      });
     } catch (err: any) {
       setError(err.message);
-    } finally {
       setIsLoading(false);
     }
   };
@@ -72,7 +77,7 @@ export default function MainComponent() {
 
   return (
     <>
-      <NavigationBar foodInfo={foodInfo} onBack={resetState} />
+      <NavigationBar onBack={image ? resetState : undefined} />
       <Divider sx={{ my: 2, borderBottomWidth: 0 }} />
       <Box sx={{ pb: "64px" }}>
         {!image && (
@@ -81,8 +86,11 @@ export default function MainComponent() {
             align="center"
             fontWeight="bold"
             mb={2}
+            mt={1}
           >
-            이미지를 업로드하여 사진 속 음식의 영양 정보를 확인해보세요!
+            {t("mainpage.title.line1", "asdfasdf")}
+            <br />
+            {t("mainpage.title.line2", "asdfadsf")}
           </Typography>
         )}
         <Stack alignItems="center">
@@ -92,7 +100,7 @@ export default function MainComponent() {
             </Box>
           }
 
-          {image && !foodInfo && !isLoading && (
+          {image && !isLoading && (
             <Stack direction="column" spacing={2} sx={{ mt: 2 }}>
               <Button
                 onClick={analyzeImage}
@@ -101,10 +109,10 @@ export default function MainComponent() {
                 size="small"
                 sx={{ width: "100%", fontSize: "1rem" }}
               >
-                분석하기
+                {t("mainpage.analyze_button", "")}
               </Button>
               <Link fontSize="small" align="center" onClick={resetState}>
-                이미지 다시 선택
+                {t("mainpage.reselect_image", "")}
               </Link>
             </Stack>
           )}
@@ -113,19 +121,26 @@ export default function MainComponent() {
             <Stack direction="row" alignItems={"center"} mt={2}>
               <CircularProgress size={20} />
               <Typography variant="body2" sx={{ ml: 2 }}>
-                이미지의 음식을 분석하고 있어요...
+                {t("mainpage.analyzing_message", "")}
               </Typography>
             </Stack>
           )}
 
           {error && (
             <Alert severity="error" sx={{ width: "100%" }}>
-              <AlertTitle>Error</AlertTitle>
+              <AlertTitle>{t("mainpage.error_title", "")}</AlertTitle>
               {error}
             </Alert>
           )}
         </Stack>
-        {foodInfo && <FoodInfo data={foodInfo} />}
+      </Box>
+      <Box sx={{ width: "100%", position: "fixed", bottom: 100 }}>
+        <Typography variant="body2" align="center" color="text.secondary">
+          {t("mainpage.contact_us", "")}
+        </Typography>
+        <Typography variant="body2" align="center" color="primary">
+          nutri.snap.contact@gmail.com
+        </Typography>
       </Box>
       <Box sx={{ width: "100%", position: "fixed", bottom: 0 }}>
         <KakaoAdFitAd />

@@ -1,6 +1,6 @@
 "use client";
 
-import ModalPopupAd from "@/app/components/ad_banner/ModalPopupAd";
+import ModalPopupAd from "@/components/AdComponent/ModalPopupAd";
 import { Box, Typography, Card, Button } from "@mui/material";
 import { useState } from "react";
 
@@ -41,7 +41,11 @@ export default function TestPage() {
         </Box>
       </Box>
 
-      <ModalPopupAd open={open} onClose={() => setOpen(false)} />
+      <ModalPopupAd
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        AdComponent={<></>}
+      />
     </>
   );
 }
