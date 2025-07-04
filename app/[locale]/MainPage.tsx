@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FoodInfoType } from "../../types";
 import { useBackHandler } from "../../utils/hooks/useBackHandler";
 import {
@@ -19,6 +19,14 @@ import NavigationBar from "../../components/CommonComponent/NavigationBar";
 import KakaoAdFitAd from "../../components/AdComponent/KakaoAdFitAd";
 import { useNutriRouter } from "../../utils/hooks/useNutriRouter";
 import { useTranslationWithDefault } from "@/utils/hooks/useTranslationWithDefault";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import LanguageIcon from "@mui/icons-material/Language";
+import { KR, US } from "country-flag-icons/react/3x2";
+import IconButton from "@mui/material/IconButton";
+import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+import getLocaleFromCookie from "@/utils/util/cookieUtil";
 
 export default function MainPage() {
   const t = useTranslationWithDefault();
@@ -26,8 +34,38 @@ export default function MainPage() {
   const foodInfoRef = useRef<FoodInfoType[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [locale, setLocale] = useState<string>("ko");
+  //const locale = getLocaleFromCookie();
+
+  const localeMenuOpen = Boolean(anchorEl);
 
   const router = useNutriRouter();
+  const pathname = usePathname();
+  const setLanguage = (locale: string) => {
+    // 1. 쿠키 설정
+    document.cookie = `NEXT_LOCALE=${locale}; path=/; max-age=31536000`;
+
+    // 2. 라우팅 변경 (현재 경로 유지하면서 locale prefix 변경)
+    const segments = pathname.split("/");
+    segments[1] = locale;
+    const newPath = segments.join("/");
+    router.push(newPath);
+  };
+
+  /** Locale 설정 */
+  const localeHandleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const localeHandleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleChangeLanguage = (locale: string) => {
+    setLanguage(locale);
+  };
+  /** Locale 설정 */
 
   const handleImageSelect = (base64: string) => {
     setImage(base64);
@@ -73,12 +111,31 @@ export default function MainPage() {
     }
   };
 
+  useEffect(() => {
+    const locale = getLocaleFromCookie();
+    setLocale(locale);
+  }, []);
+
   useBackHandler(resetState);
 
   return (
     <>
       <NavigationBar onBack={image ? resetState : undefined} />
-      <Divider sx={{ my: 2, borderBottomWidth: 0 }} />
+      <Divider sx={{ borderBottomWidth: 0 }} />
+      {/* Language Switch */}
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <IconButton
+          size="large"
+          color="default"
+          onClick={localeHandleClick}
+          aria-controls={localeMenuOpen ? "language-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={localeMenuOpen ? "true" : undefined}
+        >
+          <LanguageIcon fontSize="small" />
+          <Typography variant="body2">{locale.toUpperCase()}</Typography>
+        </IconButton>
+      </Box>
       <Box sx={{ pb: "64px" }}>
         {!image && (
           <Typography
@@ -145,6 +202,30 @@ export default function MainPage() {
       <Box sx={{ width: "100%", position: "fixed", bottom: 0 }}>
         <KakaoAdFitAd />
       </Box>
+      {/* 언어 변경 메뉴리스트 */}
+      <Menu
+        id="language-menu"
+        anchorEl={anchorEl}
+        open={localeMenuOpen}
+        onClose={localeHandleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <MenuItem onClick={() => handleChangeLanguage("ko")}>
+          <KR
+            title="South Korea"
+            style={{ width: "20px", marginRight: "5px" }}
+          />
+          <Typography variant="overline">KO</Typography>
+        </MenuItem>
+        <MenuItem onClick={() => handleChangeLanguage("en")}>
+          <US
+            title="United States"
+            style={{ width: "20px", marginRight: "5px" }}
+          />
+          <Typography variant="overline">EN</Typography>
+        </MenuItem>
+      </Menu>
     </>
   );
 }
