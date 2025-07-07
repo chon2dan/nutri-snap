@@ -24,7 +24,7 @@ export default function ScriptLoader() {
           "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8528921782994510"
         }
         crossOrigin="anonymous"
-        strategy="lazyOnload"
+        strategy="afterInteractive"
       />
     </>
   );
