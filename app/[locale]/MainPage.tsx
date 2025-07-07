@@ -25,7 +25,6 @@ import LanguageIcon from "@mui/icons-material/Language";
 import { KR, US } from "country-flag-icons/react/3x2";
 import IconButton from "@mui/material/IconButton";
 import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
 import getLocaleFromCookie from "@/utils/util/cookieUtil";
 
 export default function MainPage() {

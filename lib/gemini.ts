@@ -1,6 +1,12 @@
 import { Part, SchemaType } from "@google/generative-ai";
 import { GoogleGenAI } from "@google/genai";
 import { FoodInfoType } from "../types";
+import { getCurrentLocale } from "@/app/i18n/i18n";
+
+const localeLanguage = {
+  ko: "Korean",
+  en: "English",
+};
 
 // 데이터 URL을 GoogleGenerativeAI.Part 객체로 변환하는 함수
 function dataUrlToGenerativePart(dataUrl: string): Part {
@@ -45,6 +51,9 @@ export async function analyzeFoodImage(
       throw new Error("이미지 데이터가 올바르지 않습니다.");
     }
 
+    //지역코드
+    const locale = await getCurrentLocale();
+
     // Gemini API를 사용하여 음식 이미지 분석 요청
     // 프롬프트 텍스트를 정의
     const promptText = `You are a skilled food image analysis expert. Analyze the uploaded food image to identify distinct types of food based on plate/bowl units, and provide detailed nutritional information for each identified dish.
@@ -61,7 +70,7 @@ export async function analyzeFoodImage(
     Sauce Estimation: If the sauce is visually unclear, estimate and include the most common sauce typically served with that food.
 
     Output Format:
-    For each dish, provide the following in Korean:
+    For each dish, provide the following in ${localeLanguage[locale]}:
 
     Food Name: Accurate name of the food item.
     Estimated Food Weight: Approximate estimated weight in grams (g).
@@ -75,7 +84,7 @@ export async function analyzeFoodImage(
     Thinking Process:
     Think step-by-step and derive conclusions in a systematic and logical manner so that consistent results are produced even when analyzing the same image multiple times.
 
-    Please make sure your answer is in Korean only.`;
+    Please make sure your answer is in ${localeLanguage[locale]} only.`;
     //     `Food Image Analysis Request
     //         Analysis Goal: Identify the types of food within the image and provide detailed nutritional information for each food item (per dish).
 
@@ -100,7 +109,7 @@ export async function analyzeFoodImage(
 
     //         Think step by step and derive results so that consistent results can be obtained even when requesting the same image multiple times.
 
-    //         Please make sure your answer is in Korean only.
+    //         Please make sure your answer is in ${localeLanguage[locale]} only.
     //       `;
 
     const contents = [
@@ -172,7 +181,7 @@ export async function analyzeFoodImage(
       const parsedData: { foods: FoodInfoType[] } = JSON.parse(
         text ? text : "[]"
       );
-      console.log(JSON.stringify(parsedData.foods, null, 2));
+
       return parsedData.foods;
     } catch (error) {
       console.error("Error parsing JSON:", error);

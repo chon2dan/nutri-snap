@@ -12,6 +12,7 @@ import {
 import { styled } from "@mui/material/styles";
 import { NutrientColors } from "@/css";
 import { FoodInfoType } from "@/types";
+import { useTranslationWithDefault } from "@/utils/hooks/useTranslationWithDefault";
 
 // 기준 비율 (%)
 const TARGET_RATIO = {
@@ -43,6 +44,7 @@ export default function NutrientRatioBar({
   foodInfo: FoodInfoType;
   isPer100: "per100g" | "estimated";
 }) {
+  const t = useTranslationWithDefault();
   const total = foodInfo.carbs + foodInfo.fat + foodInfo.protein;
 
   const ratios = {
@@ -56,7 +58,7 @@ export default function NutrientRatioBar({
       <Box display="flex" flexDirection="column" gap={1}>
         <Box>
           <Typography variant="caption" align="left" display="block">
-            탄수화물{" "}
+            {t("foodinfo.carbs")}{" "}
             {isPer100 === "per100g"
               ? foodInfo.carbs
               : (foodInfo.carbs * foodInfo.estimatedFoodWeight) / 100}
@@ -70,7 +72,7 @@ export default function NutrientRatioBar({
         </Box>
         <Box>
           <Typography variant="caption" align="left" display="block">
-            단백질{" "}
+            {t("foodinfo.protein")}{" "}
             {isPer100 === "per100g"
               ? foodInfo.protein
               : (foodInfo.protein * foodInfo.estimatedFoodWeight) / 100}
@@ -84,7 +86,7 @@ export default function NutrientRatioBar({
         </Box>
         <Box>
           <Typography variant="caption" align="left" display="block">
-            지방{" "}
+            {t("foodinfo.fat")}{" "}
             {isPer100 === "per100g"
               ? foodInfo.fat
               : (foodInfo.fat * foodInfo.estimatedFoodWeight) / 100}

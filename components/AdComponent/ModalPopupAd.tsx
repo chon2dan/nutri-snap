@@ -78,6 +78,8 @@ const ModalPopupAd = ({
   const [adCount, setAdCount] = useState(5);
 
   useEffect(() => {
+    if (process.env.NODE_ENV === "development") setAdCount(0);
+
     if (adCount <= 0) return;
 
     const interval = setInterval(() => {

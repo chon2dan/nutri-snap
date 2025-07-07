@@ -1,21 +1,44 @@
 export default {
+  /** Metadata */
   "metadata.title": "NutriSnap - AI Food Photo Analyzer",
   "metadata.description":
-    "Check the nutritional information of food with a single photo!",
-  "mainpage.title.line1": "Upload a food image to check",
-  "mainpage.title.line2": "the nutritional information in the photo!",
+    "Check the nutritional information of your food with just one photo!",
+  "metadata.keywords.0": "food photo nutrition info",
+  "metadata.keywords.1": "AI food analysis",
+  "metadata.keywords.2": "food recognition AI",
+  "metadata.keywords.3": "check nutrition from photo",
+  "metadata.keywords.4": "diet analysis",
+  "metadata.keywords.5": "calorie analyzer",
+  "metadata.keywords.6": "automatic food detection",
+  "metadata.keywords.7": "nutritional content by food",
+
+  /** Main Page */
+  "mainpage.title.line1": "Upload a food image",
+  "mainpage.title.line2":
+    "and check the nutritional information of the food in the photo!",
   "mainpage.analyze_button": "Analyze",
   "mainpage.reselect_image": "Reselect Image",
   "mainpage.analyzing_message": "Analyzing the food in the image...",
   "mainpage.error_title": "Error",
   "mainpage.contact_us": "Contact us",
 
-  "metadata.keywords.0": "음식 사진 영양정보",
-  "metadata.keywords.1": "AI 음식 분석",
-  "metadata.keywords.2": "음식 인식 AI",
-  "metadata.keywords.3": "사진으로 영양정보 확인",
-  "metadata.keywords.4": "식단 분석",
-  "metadata.keywords.5": "칼로리 분석기",
-  "metadata.keywords.6": "자동 음식 감지",
-  "metadata.keywords.7": "음식별 영양 성분",
+  /** FoodInfo Page */
+  "foodinfo.total_calories": "Total Estimated Calories",
+  "foodinfo.total_weight": "Total Food Weight",
+  "foodinfo.total_weight_note1":
+    "Nutritional information is based on the weight of the food analyzed from the photo.",
+  "foodinfo.total_weight_note2": "May differ from actual food weight.",
+
+  "foodinfo.share_message":
+    "Share the nutritional information of today's meal on social media!",
+
+  "foodinfo.collapse_open": "Close",
+  "foodinfo.collapse_close": "View",
+  "foodinfo.expected_weight_info": "per Estimated Weight",
+  "foodinfo.per100g_info": "per 100g",
+  "foodinfo.expected_weight": "Estim Weight",
+  "foodinfo.calories": "Calories",
+  "foodinfo.carbs": "Carbs",
+  "foodinfo.protein": "Protein",
+  "foodinfo.fat": "Fat",
 } as const;

@@ -19,4 +19,23 @@ export default {
   "mainpage.analyzing_message": "이미지의 음식을 분석하고 있어요...",
   "mainpage.error_title": "오류",
   "mainpage.contact_us": "문의 / Contact us",
+
+  /** FoodInfo Page */
+  "foodinfo.total_calories": "총 예상 열량",
+  "foodinfo.total_weight": "음식 총 중량",
+  "foodinfo.total_weight_note1":
+    "사진으로 분석한 음식의 무게에 따른 영양정보입니다.",
+  "foodinfo.total_weight_note2": "실제 음식의 무게와는 다를 수 있습니다.",
+
+  "foodinfo.share_message": "오늘 찍은 음식의 영양정보를 SNS로 공유해보세요",
+
+  "foodinfo.collapse_open": "총 영양 정보 접기",
+  "foodinfo.collapse_close": "총 영양 정보 보기",
+  "foodinfo.expected_weight_info": "예상 중량 당 정보",
+  "foodinfo.per100g_info": "100g 당 정보",
+  "foodinfo.expected_weight": "예상 중량",
+  "foodinfo.calories": "칼로리",
+  "foodinfo.carbs": "탄수화물",
+  "foodinfo.protein": "단백질",
+  "foodinfo.fat": "지방",
 } as const;

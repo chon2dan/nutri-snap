@@ -28,9 +28,11 @@ import { useScreenshotShare } from "@/utils/hooks/useScreenshotShare";
 import ShareIcon from "@mui/icons-material/Share";
 import ModalPopupAd from "@/components/AdComponent/ModalPopupAd";
 import KakaoAdFitAdModal from "@/components/AdComponent/KakaoAdFitAdModal";
+import { useTranslationWithDefault } from "@/utils/hooks/useTranslationWithDefault";
 
 export function FoodInfoPage() {
   const { router, routeData } = useNutriRouter();
+  const t = useTranslationWithDefault();
 
   const [nutriCollapseOpen, setNutriCollapseOpen] = useState(true);
   const [totalNutrient, setTotalNutrient] = useState({
@@ -72,7 +74,6 @@ export function FoodInfoPage() {
 
   useEffect(() => {
     if (routeData) {
-      console.log(routeData);
       setFoodInfoData(routeData.foodInfo);
       setTotalNutrient(
         calculateTotalNutrientByEstimatedFoodWeight(routeData.foodInfo)
@@ -137,11 +138,12 @@ export function FoodInfoPage() {
               fontWeight="bold"
               color={NutrientColors.calories}
             >
-              🔥 총 예상 열량 : {totalNutrient.totalCalories}
+              🔥 {t("foodinfo.total_calories")} : {totalNutrient.totalCalories}
               kcal
             </Typography>
             <Typography variant="subtitle2" align="center" mb={1} mt={1}>
-              음식 총 중량: {totalNutrient.totalEstimatedFoodWeight}g
+              {t("foodinfo.total_weight")}:{" "}
+              {totalNutrient.totalEstimatedFoodWeight}g
             </Typography>
             {foodInfoData?.map((item, index) => (
               <Stack key={index} direction="row" justifyContent="center">
@@ -162,7 +164,11 @@ export function FoodInfoPage() {
                 xAxis={[
                   {
                     scaleType: "band",
-                    data: ["탄수화물", "단백질", "지방"],
+                    data: [
+                      t("foodinfo.carbs"),
+                      t("foodinfo.protein"),
+                      t("foodinfo.fat"),
+                    ],
                     // @ts-ignore
                     categoryGapRatio: 0.4,
                     disableLine: true,
@@ -211,9 +217,9 @@ export function FoodInfoPage() {
             </Box>
             <Box textAlign={"center"} color="text.secondary">
               <Typography variant="caption">
-                * 사진으로 분석한 음식의 무게에 따른 영양정보입니다.
+                * {t("foodinfo.total_weight_note1")}
                 <br />
-                실제 음식의 무게와는 다를 수 있습니다.
+                {t("foodinfo.total_weight_note2")}
               </Typography>
             </Box>
           </Paper>
@@ -230,7 +236,7 @@ export function FoodInfoPage() {
           </Fab>
         </Box>
         <Box textAlign={"center"} mb={2}>
-          오늘 찍은 음식의 영양정보를 SNS로 공유해보세요
+          {t("foodinfo.share_message")}
         </Box>
         <Box textAlign={"center"} mb={1}>
           <Button
@@ -238,7 +244,9 @@ export function FoodInfoPage() {
             size="small"
             onClick={() => setNutriCollapseOpen((prev) => !prev)}
           >
-            {nutriCollapseOpen ? "총 영양 정보 접기" : "총 영양 정보 보기"}
+            {nutriCollapseOpen
+              ? t("foodinfo.collapse_open")
+              : t("foodinfo.collapse_close")}
           </Button>
         </Box>
         <Collapse in={nutriCollapseOpen}>
@@ -256,10 +264,10 @@ export function FoodInfoPage() {
             }}
           >
             <ToggleButton value="estimated" aria-label="right">
-              예상 중량 당 정보
+              {t("foodinfo.expected_weight_info")}
             </ToggleButton>
             <ToggleButton value="per100g" aria-label="left">
-              100g 당 정보
+              {t("foodinfo.per100g_info")}
             </ToggleButton>
           </ToggleButtonGroup>
 
@@ -305,7 +313,9 @@ export function FoodInfoPage() {
                     >
                       {isPer100 === "per100g"
                         ? "(per 100g)"
-                        : `(예상 중량 ${item.estimatedFoodWeight}g)`}
+                        : `(${t("foodinfo.expected_weight")} ${
+                            item.estimatedFoodWeight
+                          }g)`}
                     </span>
                   </Typography>
                 </Grid>
