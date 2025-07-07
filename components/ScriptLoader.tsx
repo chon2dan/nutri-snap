@@ -20,10 +20,11 @@ export default function ScriptLoader() {
       </Script>
       <Script
         async
-        id="adsense-init"
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8528921782994510"
+        src={
+          "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8528921782994510"
+        }
         crossOrigin="anonymous"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
     </>
   );
