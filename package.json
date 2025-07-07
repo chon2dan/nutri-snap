@@ -17,6 +17,7 @@
     "@mui/icons-material": "^7.1.1",
     "@mui/material": "^7.1.1",
     "@mui/x-charts": "^7.29.1",
+    "country-flag-icons": "^1.5.19",
     "emotion": "^11.0.0",
     "html2canvas": "^1.4.1",
     "next": "15.3.3",
