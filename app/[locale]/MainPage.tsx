@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { FoodInfoType } from "../../types";
 import { useBackHandler } from "../../utils/hooks/useBackHandler";
 import {
@@ -25,7 +25,7 @@ import LanguageIcon from "@mui/icons-material/Language";
 import { KR, US } from "country-flag-icons/react/3x2";
 import IconButton from "@mui/material/IconButton";
 import { usePathname } from "next/navigation";
-import getLocaleFromCookie from "@/utils/util/cookieUtil";
+import { usePathLocale } from "@/utils/hooks/usePathLocale";
 
 export default function MainPage() {
   const t = useTranslationWithDefault();
@@ -34,23 +34,12 @@ export default function MainPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [locale, setLocale] = useState<string>("ko");
-  //const locale = getLocaleFromCookie();
-
-  const localeMenuOpen = Boolean(anchorEl);
 
   const router = useNutriRouter();
   const pathname = usePathname();
-  const setLanguage = (locale: string) => {
-    // 1. 쿠키 설정
-    document.cookie = `NEXT_LOCALE=${locale}; path=/; max-age=31536000`;
+  const locale = usePathLocale();
 
-    // 2. 라우팅 변경 (현재 경로 유지하면서 locale prefix 변경)
-    const segments = pathname.split("/");
-    segments[1] = locale;
-    const newPath = segments.join("/");
-    router.push(newPath);
-  };
+  const localeMenuOpen = Boolean(anchorEl);
 
   /** Locale 설정 */
   const localeHandleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -61,8 +50,11 @@ export default function MainPage() {
     setAnchorEl(null);
   };
 
-  const handleChangeLanguage = (locale: string) => {
-    setLanguage(locale);
+  const handleChangeLanguage = (newLocale: "en" | "ko") => {
+    const segments = pathname.split("/");
+    segments[1] = newLocale;
+    const newPath = segments.join("/");
+    router.push(newPath);
   };
   /** Locale 설정 */
 
@@ -109,11 +101,6 @@ export default function MainPage() {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    const locale = getLocaleFromCookie();
-    setLocale(locale);
-  }, []);
 
   useBackHandler(resetState);
 

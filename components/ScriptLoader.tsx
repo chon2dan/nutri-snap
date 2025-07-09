@@ -1,9 +1,18 @@
 "use client";
 
+import { usePathLocale } from "@/utils/hooks/usePathLocale";
 import Script from "next/script";
+import { useEffect, useState } from "react";
 
 export default function ScriptLoader() {
   const kakaoKey = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
+  const nowLocale = usePathLocale();
+
+  const [locale, setLocale] = useState("ko");
+  useEffect(() => {
+    console.log(nowLocale);
+    setLocale(nowLocale);
+  }, []);
 
   return (
     <>
@@ -18,14 +27,18 @@ export default function ScriptLoader() {
           }
         `}
       </Script>
-      <Script
-        async
-        src={
-          "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8528921782994510"
-        }
-        crossOrigin="anonymous"
-        strategy="afterInteractive"
-      />
+      {/*
+      프로펠러 영역 광고
+      ko 아닐 경우에만 노출
+      */}
+      {locale !== "ko" && (
+        <>
+          <Script>{`(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('gizokraijaw.net',9544237,document.createElement('script'))`}</Script>
+          <Script>{`(function(d,z,s){s.src='https://'+d+'/400/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('vemtoutcheeg.com',9543175,document.createElement('script'))`}</Script>
+          <Script>{`(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('groleegni.net',9545149,document.createElement('script'))`}</Script>
+          <Script>{`(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('groleegni.net',9545149,document.createElement('script'))`}</Script>
+        </>
+      )}
     </>
   );
 }
