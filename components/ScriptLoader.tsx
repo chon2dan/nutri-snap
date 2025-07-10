@@ -10,7 +10,7 @@ export default function ScriptLoader() {
 
   const [locale, setLocale] = useState("ko");
   useEffect(() => {
-    console.log(nowLocale);
+    console.log("nowLocale", nowLocale);
     setLocale(nowLocale);
   }, []);
 
@@ -33,22 +33,9 @@ export default function ScriptLoader() {
       */}
       {locale !== "ko" && (
         <>
-          <Script
-            id="gizokraijaw.net"
-            strategy="beforeInteractive"
-          >{`(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('gizokraijaw.net',9544237,document.createElement('script'))`}</Script>
-          <Script
-            id="vemtoutcheeg.com"
-            strategy="beforeInteractive"
-          >{`(function(d,z,s){s.src='https://'+d+'/400/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('vemtoutcheeg.com',9543175,document.createElement('script'))`}</Script>
-          <Script
-            id="groleegni.net"
-            strategy="beforeInteractive"
-          >{`(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('groleegni.net',9545149,document.createElement('script'))`}</Script>
-          <Script
-            id="groleegni.net"
-            strategy="beforeInteractive"
-          >{`(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('groleegni.net',9545149,document.createElement('script'))`}</Script>
+          <Script id="gizokraijaw.net">{`(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('gizokraijaw.net',9544237,document.createElement('script'))`}</Script>
+          <Script id="vemtoutcheeg.com">{`(function(d,z,s){s.src='https://'+d+'/400/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('vemtoutcheeg.com',9543175,document.createElement('script'))`}</Script>
+          <Script id="groleegni.net">{`(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('groleegni.net',9545149,document.createElement('script'))`}</Script>
         </>
       )}
     </>
