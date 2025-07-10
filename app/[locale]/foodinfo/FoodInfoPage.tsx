@@ -83,11 +83,11 @@ export function FoodInfoPage() {
 
   return (
     <>
-      <ModalPopupAd
+      {/* <ModalPopupAd
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         AdComponent={<KakaoAdFitAdModal />}
-      />
+      /> */}
       <NavigationBar onBack={() => router.back()} />
       <Box sx={{ pb: "64px" }}>
         {routeData?.image && (
