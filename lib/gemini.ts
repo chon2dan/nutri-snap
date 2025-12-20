@@ -123,7 +123,7 @@ export async function analyzeFoodImage(
     ];
 
     const result = await genAI.models.generateContent({
-      model: "gemini-2.5-flash-lite-preview-06-17",
+      model: "gemini-2.5-flash-lite",
       contents: contents,
       config: {
         responseMimeType: "application/json",
